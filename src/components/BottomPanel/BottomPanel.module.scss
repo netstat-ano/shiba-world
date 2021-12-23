@@ -1,0 +1,10 @@
+.bottom-panel{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: #afafaf;
+    position: relative;
+    z-index: 1;
+}
+.bottom-panel div{
+    text-align: center;
+}
