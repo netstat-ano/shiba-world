@@ -14,7 +14,6 @@ const ShopOverlay = (props) => {
         const searchingItems = [];
         onValue(searchingRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(data);
             for (const key in data) {
                 searchingItems.push(data[key]);
             }
@@ -30,7 +29,8 @@ const ShopOverlay = (props) => {
                     {url.length === 0 && <Categories setUrl={setUrl} />}
                     {url.includes('food') ||
                     url.includes('drinks') ||
-                    url.includes('t-shirts') ? (
+                    url.includes('t-shirts') ||
+                    url.includes('pants') ? (
                         <ShopOverlayList
                             type="buy"
                             setUrl={setUrl}

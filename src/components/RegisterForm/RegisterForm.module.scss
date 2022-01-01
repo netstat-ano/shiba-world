@@ -1,0 +1,22 @@
+.register-form {
+    margin-top: 20vh;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.invalid {
+    background-color: #f38d98;
+}
+.warning{
+    color: #dc3545;
+    font-size: .8rem;
+    margin-top: -0.6rem;
+    position: absolute;
+}
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.button{
+    margin-top: 1.5rem;
+}

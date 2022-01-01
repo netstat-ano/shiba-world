@@ -1,0 +1,26 @@
+.bad-alert {
+    top: 20px;
+    color: white;
+    position: absolute;
+    .title {
+        background-color: #dc3545;
+        padding: 0.25rem 0.5rem;
+    }
+    .content {
+        background-color: #f35262;
+        padding: 0.25rem 0.5rem;
+    }
+}
+.good-alert {
+    color: white;
+    position: absolute;
+    border-radius: 2rem;
+    .title {
+        background-color: #28a745;
+        padding: 0.25rem 0.5rem;
+    }
+    .content {
+        background-color: #28a745;
+        padding: 0.25rem 0.5rem;
+    }
+}
