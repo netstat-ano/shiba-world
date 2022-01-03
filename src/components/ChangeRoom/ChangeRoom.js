@@ -5,17 +5,17 @@ const ChangeRoom = () => {
     const roomCtx = useContext(PlaceContext);
     const [room, setRoom] = useState({ room: 'bathroom', index: 2 });
     const onChangeLeftHandler = () => {
-            roomCtx.currentRoom = roomCtx.availableRooms[room.index - 1];
+        roomCtx.currentRoom = roomCtx.availableRooms[room.index - 1];
+        setRoom((prevState) => {
+            return {
+                room: roomCtx.currentRoom,
+                index: prevState.index - 1,
+            };
+        });
+        if (room.index <= 1) {
             setRoom((prevState) => {
                 return {
                     room: roomCtx.currentRoom,
-                    index: prevState.index - 1,
-                };
-            });
-        if (room.index === 0) {
-            setRoom((prevState) => {
-                return {
-                    ...prevState,
                     index: roomCtx.availableRooms.length,
                 };
             });
@@ -29,7 +29,7 @@ const ChangeRoom = () => {
         if (room.index >= 3) {
             setRoom((prevState) => {
                 return {
-                    ...prevState,
+                    room: roomCtx.currentRoom,
                     index: -1,
                 };
             });
