@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import BottomPanel from './components/BottomPanel/BottomPanel';
+import Game from './components/Game/Game';
 import Authentication from './components/Authentication/Authentication';
 function App() {
     const [user, setUser] = useState();
@@ -8,8 +8,7 @@ function App() {
             {!user && <Authentication setUser={setUser}/>}
             {user && (
                 <>
-                    <div style={{ marginTop: '100vw' }}>shiba-world</div>{' '}
-                    <BottomPanel />
+                    <Game />
                 </>
             )}
         </div>
