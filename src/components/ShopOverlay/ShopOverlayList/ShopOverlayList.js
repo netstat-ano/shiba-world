@@ -18,6 +18,7 @@ const ShopOverlayList = (props) => {
             {props.items.map((element) => {
                 return (
                     <ShopOverlayItem
+                        room={props.room}
                         type={props.type}
                         key={element.name}
                         item={element}

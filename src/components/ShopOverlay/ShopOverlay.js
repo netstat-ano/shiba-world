@@ -27,11 +27,19 @@ const ShopOverlay = (props) => {
                 <div className={styles.url}>{url}</div>
                 <div className={styles['shop-overlay-list']}>
                     {url.length === 0 && <Categories setUrl={setUrl} />}
-                    {url.includes('food') ||
-                    url.includes('drinks') ||
-                    url.includes('t-shirts') ||
-                    url.includes('pants') ? (
+                    {url.includes('food') || url.includes('drinks') ? (
                         <ShopOverlayList
+                            room="kitchen"
+                            type="buy"
+                            setUrl={setUrl}
+                            items={menuItems}
+                        />
+                    ) : (
+                        ''
+                    )}
+                    {url.includes('t-shirts') || url.includes('pants') ? (
+                        <ShopOverlayList
+                            room="bedroom"
                             type="buy"
                             setUrl={setUrl}
                             items={menuItems}

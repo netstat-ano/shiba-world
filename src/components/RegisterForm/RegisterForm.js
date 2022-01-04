@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import LoginInput from '../LoginForm/LoginInput/LoginInput';
 import Card from '../UI/Card/Card';
 import inputStyles from '../LoginForm/LoginForm.module.scss';
@@ -7,12 +7,15 @@ import GreenButton from '../UI/GreenButton/GreenButton';
 import UnvisibleButton from '../UI/UnvisibleButton/UnvisibleButton';
 import validate from '../../functions/authentication/validate';
 import Alert from '../UI/Alert/Alert';
+import { getDatabase, ref, set } from 'firebase/database';
+import { PlaceContext } from '../place-context/place-context';
 import {
     getAuth,
     createUserWithEmailAndPassword,
     updateProfile,
 } from 'firebase/auth';
 const RegisterForm = (props) => {
+    const roomCtx = useContext(PlaceContext);
     const [isValid, setIsValid] = useState({
         username: true,
         email: true,
@@ -28,7 +31,11 @@ const RegisterForm = (props) => {
     const passwordInputRef = useRef();
     const retypePasswordInputRef = useRef();
     const validateData = (event) => {
-        const result = validate(event.target.value, event.target.id, passwordInputRef.current.value);
+        const result = validate(
+            event.target.value,
+            event.target.id,
+            passwordInputRef.current.value
+        );
         setIsValid((prevState) => {
             prevState[`${event.target.id}`] = result;
             return { ...prevState };
@@ -46,6 +53,18 @@ const RegisterForm = (props) => {
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, emailValue, passwordValue)
             .then((userCredential) => {
+                const db = getDatabase();
+                for (const element of roomCtx.availableRooms) {
+                    set(
+                        ref(
+                            db,
+                            `users/${userCredential.user.uid}/items/${element}`
+                        ),
+                        {
+                            room: element,
+                        }
+                    );
+                }
                 updateProfile(auth.currentUser, {
                     displayName: usernameInputRef.current.value,
                 })
@@ -166,12 +185,16 @@ const RegisterForm = (props) => {
                         />
                         {!isValid.retypePassword ? (
                             <div className={styles.warning}>
-                                Passwords must be the same and must have at least 6 characters.
+                                Passwords must be the same and must have at
+                                least 6 characters.
                             </div>
                         ) : (
                             ''
                         )}
-                        <GreenButton className={styles.button} button={{ type: 'submit' }}>
+                        <GreenButton
+                            className={styles.button}
+                            button={{ type: 'submit' }}
+                        >
                             Sign up
                         </GreenButton>
                     </form>

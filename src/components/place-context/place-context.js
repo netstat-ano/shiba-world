@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 export const PlaceContext = React.createContext({
-    currentRoom: 'bathroom',
+    currentRoom: '',
     availableRooms: ['living-room', 'bedroom', 'bathroom', 'kitchen', 'garden'],
+    onChangeCurrentRoom: (setRoom) => {},
 });
 
 const PlaceContextProvider = (props) => {
+    const [room, setRoom] = useState('bathroom');
     return (
         <PlaceContext.Provider
             value={{
-                currentRoom: 'bathroom',
+                currentRoom: room,
                 availableRooms: [
                     'living-room',
                     'bedroom',
@@ -16,6 +18,7 @@ const PlaceContextProvider = (props) => {
                     'kitchen',
                     'garden',
                 ],
+                setRoom: setRoom,
             }}
         >
             {props.children}

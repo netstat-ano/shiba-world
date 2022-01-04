@@ -1,8 +1,9 @@
-import { useContext } from 'react';
-import {PlaceContext} from '../place-context/place-context'
+import ItemsList from './ItemsList/ItemsList';
 const Items = (props) => {
-    const placeCtx = useContext(PlaceContext);
-    console.log(placeCtx);
-    return <div>Items</div>;
+    return (
+        <>
+            <ItemsList />
+        </>
+    );
 };
 export default Items;
