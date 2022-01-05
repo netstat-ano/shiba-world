@@ -8,10 +8,11 @@ const ChangeRoom = () => {
         roomCtx.setRoom(roomCtx.availableRooms[roomIndex - 1]);
         if (roomCtx.currentRoom === undefined) {
             roomCtx.setRoom('garden');
-            setRoomIndex(roomCtx.availableRooms.length - 2);
+            setRoomIndex(roomCtx.availableRooms.length - 1);
+        } else {
+            setRoomIndex((prevState) => prevState - 1);
         }
-        setRoomIndex((prevState) => prevState - 1);
-        if (roomIndex <= 1) {
+        if (roomIndex < 0) {
             setRoomIndex(roomCtx.availableRooms.length);
         }
     };
@@ -19,13 +20,16 @@ const ChangeRoom = () => {
         roomCtx.setRoom(roomCtx.availableRooms[roomIndex + 1]);
         if (roomCtx.currentRoom === undefined) {
             roomCtx.setRoom('living-room');
-            setRoomIndex((prevState) => 1);
+            setRoomIndex((prevState) => 0);
+        } else {
+            setRoomIndex((prevState) => prevState + 1);
         }
-        setRoomIndex((prevState) => prevState + 1);
-        if (roomIndex >= 3) {
-            setRoomIndex(-1);
+        if (roomIndex > 4) {
+            setRoomIndex(0);
         }
     };
+    console.log(roomIndex);
+    console.log(roomCtx.currentRoom);
     return (
         <div className={styles.center}>
             <button onClick={onChangeLeftHandler}>Arrow left</button>

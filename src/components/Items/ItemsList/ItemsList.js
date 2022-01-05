@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import { getDatabase, ref, onValue, get, child } from 'firebase/database';
+import { ref, get, child } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { PlaceContext } from '../../place-context/place-context';
 import { database } from '../../../firebase';

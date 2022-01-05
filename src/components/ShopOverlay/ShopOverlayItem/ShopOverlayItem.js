@@ -4,10 +4,10 @@ import Card from '../../UI/Card/Card';
 import { ref, set, get, child, runTransaction } from 'firebase/database';
 import { database } from '../../../firebase.js';
 import { getAuth } from 'firebase/auth';
-import { PlaceContext } from '../../place-context/place-context';
+import { InventoryContext } from '../../inventory-context/InventoryContext';
 import { useContext } from 'react';
 const ShopOverlayItem = (props) => {
-    const roomCtx = useContext(PlaceContext);
+    const invCtx = useContext(InventoryContext);
     const auth = getAuth();
     const user = auth.currentUser;
     const onBuyHandler = (event) => {
@@ -16,32 +16,45 @@ const ShopOverlayItem = (props) => {
             database,
             `users/${user.uid}/items/${props.room}/${props.item.name}`
         );
-        get(child(db, `users/${user.uid}/items/${props.room}/${props.item.name}`))
+        get(
+            child(
+                db,
+                `users/${user.uid}/items/${props.room}/${props.item.name}`
+            )
+        )
             .then((snapshot) => {
                 if (snapshot.exists()) {
                     runTransaction(foodRef, (data) => {
                         if (data) {
                             data.amount++;
+                            invCtx.setItems((prevState) => {
+                                const newState = { ...prevState };
+                                newState[props.item.name] = data;
+                                return { ...newState };
+                            });
                         }
                         return data;
                     });
                 } else {
-                    set(
-                        ref(
-                            database,
-                            `users/${user.uid}/items/${props.room}/${props.item.name}`
-                        ),
-                        {
+                    runTransaction(foodRef, (data) => {
+                        data.name = props.item.name;
+                        data.amount = 1;
+                    });
+                    invCtx.setItems((prevState) => {
+                        const newState = { ...prevState };
+                        newState[props.item.name] = {
                             name: props.item.name,
                             amount: 1,
-                        }
-                    );
+                        };
+                        return newState;
+                    });
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
     };
+    console.log(invCtx.items);
     return (
         <Card>
             <div className={styles['shop-item__name']}>{props.item.name}</div>

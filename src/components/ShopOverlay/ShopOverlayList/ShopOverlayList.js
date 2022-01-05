@@ -1,5 +1,6 @@
 import ShopOverlayItem from '../ShopOverlayItem/ShopOverlayItem';
 import BackBtn from '../../UI/BackBtn/BackBtn';
+import InventoryContextProvider from '../../inventory-context/InventoryContext';
 const ShopOverlayList = (props) => {
     const onUndoHandler = (event) => {
         props.setUrl('');
