@@ -1,44 +1,17 @@
 import styles from './ChangeRoom.module.scss';
 import { PlaceContext } from '../place-context/place-context';
 import { useContext, useState } from 'react';
+import arrayChange from '../../functions/arrayChange/arrayChange';
 const ChangeRoom = () => {
     const roomCtx = useContext(PlaceContext);
     const [roomIndex, setRoomIndex] = useState(2);
-    const onChangeDirectionHandler = (
-        type,
-        array,
-        startingPosition,
-        setStartingPosition,
-        setValue
-    ) => {
-        if (type === 'left') {
-            if (startingPosition - 1 <= 0) {
-                setStartingPosition(array.length);
-            } else if (startingPosition - 1 >= array.length) {
-                setStartingPosition(array.length);
-            } else {
-                setStartingPosition(startingPosition - 1);
-            }
-            setValue(array[startingPosition - 1]);
-        } else if (type === 'right') {
-            if (startingPosition + 1 >= array.length - 1) {
-                setStartingPosition(-1); //jesli starting position + 1 jest wieksze od dlugosci tablicy - 1
-            } else if (startingPosition + 1 < 0) {
-                setStartingPosition(-1); //jesli starting postion + 1 jest mniejsze od zera
-            } else {
-                setStartingPosition(startingPosition + 1); //zawsze
-            }
-            setValue(array[startingPosition + 1]);
-        }
-    };
 
-    console.log(roomIndex);
-    console.log(roomCtx.currentRoom);
+
     return (
         <div className={styles.center}>
             <button
                 onClick={() => {
-                    onChangeDirectionHandler(
+                    arrayChange(
                         'left',
                         roomCtx.availableRooms,
                         roomIndex,
@@ -52,7 +25,7 @@ const ChangeRoom = () => {
             <label>{roomCtx.currentRoom}</label>
             <button
                 onClick={() => {
-                    onChangeDirectionHandler(
+                    arrayChange(
                         'right',
                         roomCtx.availableRooms,
                         roomIndex,
