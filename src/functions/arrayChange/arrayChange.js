@@ -7,7 +7,7 @@ const arrayChange = (
 ) => {
     if (type === 'left') {
         if (startingPosition - 1 < 0) {
-            setStartingPosition(array.length - 1);
+            setStartingPosition(array.length);
         } else if (startingPosition - 1 > array.length) {
             setStartingPosition(array.length);
         } else {

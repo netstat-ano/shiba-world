@@ -1,7 +1,7 @@
 import styles from './ShopOverlayItem.module.scss';
 import UnvisibleButton from '../../UI/UnvisibleButton/UnvisibleButton';
 import Card from '../../UI/Card/Card';
-import { ref, set, get, child, runTransaction } from 'firebase/database';
+import { ref, set, get, runTransaction } from 'firebase/database';
 import { database } from '../../../firebase.js';
 import { getAuth } from 'firebase/auth';
 import { InventoryContext } from '../../inventory-context/InventoryContext';
@@ -16,15 +16,12 @@ const ShopOverlayItem = (props) => {
             database,
             `users/${user.uid}/items/${props.room}/${props.item.name}`
         );
-        get(
-            child(
-                db,
-                `users/${user.uid}/items/${props.room}/${props.item.name}`
-            )
-        )
+        get(foodRef)
             .then((snapshot) => {
-                if (snapshot.exists()) {
+                console.log(snapshot.hasChild('name'));
+                if (snapshot.hasChild('name')) {
                     runTransaction(foodRef, (data) => {
+                        console.log('runtransaction');
                         if (data) {
                             data.amount++;
                             invCtx.setItems((prevState) => {
@@ -36,9 +33,13 @@ const ShopOverlayItem = (props) => {
                         return data;
                     });
                 } else {
-                    runTransaction(foodRef, (data) => {
-                        data.name = props.item.name;
-                        data.amount = 1;
+                    // runTransaction(foodRef, (data) => {
+                    //     data.name = props.item.name;
+                    //     data.amount = 1;
+                    // });
+                    set(foodRef, {
+                        name: props.item.name,
+                        amount: 1,
                     });
                     invCtx.setItems((prevState) => {
                         const newState = { ...prevState };
