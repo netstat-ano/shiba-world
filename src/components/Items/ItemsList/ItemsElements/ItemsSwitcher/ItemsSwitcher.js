@@ -23,45 +23,39 @@ const ItemsSwitcher = (props) => {
     const [items, setItems] = useState(initItems());
 
     useEffect(() => {
-        for (const item in props.inventory) {
-            const update = (() => {
-                return new Promise((resolve, reject) => {
-                    let isCurrentItem = false;
-                    if (content && item === content.name) {
-                        isCurrentItem = true;
-                    }
+        const update = (() => {
+            let stateRef = [];
+            return new Promise((resolve, reject) => {
+                setItems('');
+                for (const item in props.inventory) {
                     setItems((prevState) => {
-                        setItems('');
-                        for (const element in props.inventory) {
-                            setItems((prevState) => {
-                                const newState = [
-                                    ...prevState,
-                                    {
-                                        name: props.inventory[element].name,
-                                        amount: props.inventory[element].amount,
-                                    },
-                                ];
-                                const index = newState.findIndex(
-                                    (fIndex) => fIndex.name === content.name
-                                );
-                                resolve([isCurrentItem, newState, index]);
-                                return newState;
-                            });
-                        }
+                        const newState = [
+                            ...prevState,
+                            {
+                                name: props.inventory[item].name,
+                                amount: props.inventory[item].amount,
+                            },
+                        ];
+                        stateRef[0] = newState;
+                        return newState;
                     });
-                }).then((result) => {
-                    const [item, newState, index] = result;
-                    console.log(newState[index]);
-                    if (item && newState[index].amount > 0) {
-                        setContent({
-                            name: newState[index].name,
-                            amount: newState[index].amount,
-                        });
-                    }
-                });
-            })();
-        }
+                }
+                resolve(stateRef);
+            }).then((result) => {
+                const [stateRef] = result;
+                const index = stateRef.findIndex(
+                    (fIndex) => fIndex.name === content.name
+                );
+                if (stateRef[index].amount > 0) {
+                    setContent({
+                        name: stateRef[index].name,
+                        amount: stateRef[index].amount,
+                    });
+                }
+            });
+        })();
     }, [props.inventory]);
+    console.log(items);
     return (
         <>
             <div>

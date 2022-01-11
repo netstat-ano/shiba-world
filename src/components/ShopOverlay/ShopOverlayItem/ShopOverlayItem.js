@@ -31,10 +31,6 @@ const ShopOverlayItem = (props) => {
                         return data;
                     });
                 } else {
-                    // runTransaction(foodRef, (data) => {
-                    //     data.name = props.item.name;
-                    //     data.amount = 1;
-                    // });
                     set(foodRef, {
                         name: props.item.name,
                         amount: 1,
