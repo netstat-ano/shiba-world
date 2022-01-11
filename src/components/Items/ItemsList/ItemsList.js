@@ -4,8 +4,10 @@ import { useContext, useEffect, useState } from 'react';
 import { PlaceContext } from '../../place-context/place-context';
 import { database } from '../../../firebase';
 import ItemsElements from './ItemsElements/ItemsElements';
+import { InventoryContext } from '../../inventory-context/InventoryContext';
 const ItemsList = () => {
     const [inventory, setInventory] = useState({});
+    const invCtx = useContext(InventoryContext);
     const roomCtx = useContext(PlaceContext);
     const auth = getAuth();
     const user = auth.currentUser;
@@ -23,7 +25,7 @@ const ItemsList = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, [roomCtx.currentRoom, dbRef, user.uid]);
+    }, [roomCtx.currentRoom, dbRef, user.uid, invCtx]);
     return (
         <div>
             <ItemsElements inventory={inventory} />

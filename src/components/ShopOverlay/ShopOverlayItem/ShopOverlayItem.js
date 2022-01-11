@@ -18,10 +18,8 @@ const ShopOverlayItem = (props) => {
         );
         get(foodRef)
             .then((snapshot) => {
-                console.log(snapshot.hasChild('name'));
                 if (snapshot.hasChild('name')) {
                     runTransaction(foodRef, (data) => {
-                        console.log('runtransaction');
                         if (data) {
                             data.amount++;
                             invCtx.setItems((prevState) => {
