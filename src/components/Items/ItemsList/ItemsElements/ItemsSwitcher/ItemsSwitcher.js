@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { InventoryContext } from '../../../../inventory-context/InventoryContext';
 import arrayChange from '../../../../../functions/arrayChange/arrayChange';
-
+import { useDrag } from 'react-dnd';
 const ItemsSwitcher = (props) => {
     const initContent = () => {
         for (const item in props.inventory) {
@@ -21,6 +21,13 @@ const ItemsSwitcher = (props) => {
     const [itemIndex, setItemIndex] = useState(0);
     const [content, setContent] = useState(initContent());
     const [items, setItems] = useState(initItems());
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: 'food',
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+        item: { ...content },
+    }));
 
     useEffect(() => {
         const update = (() => {
@@ -55,40 +62,47 @@ const ItemsSwitcher = (props) => {
             });
         })();
     }, [props.inventory]);
-    console.log(items);
     return (
         <>
+            {items.length > 1 && (
+                <div>
+                    <button
+                        onClick={() => {
+                            arrayChange(
+                                'left',
+                                items,
+                                itemIndex,
+                                setItemIndex,
+                                setContent
+                            );
+                        }}
+                    >
+                        Left
+                    </button>
+                </div>
+            )}
             <div>
-                <button
-                    onClick={() => {
-                        arrayChange(
-                            'left',
-                            items,
-                            itemIndex,
-                            setItemIndex,
-                            setContent
-                        );
-                    }}
-                >
-                    Left
-                </button>
+                <span ref={drag}>
+                    {content && `${content.name} x${content.amount}`}
+                </span>
             </div>
-            <div>{content && `${content.name} x${content.amount}`}</div>
-            <div>
-                <button
-                    onClick={() => {
-                        arrayChange(
-                            'right',
-                            items,
-                            itemIndex,
-                            setItemIndex,
-                            setContent
-                        );
-                    }}
-                >
-                    Right
-                </button>
-            </div>
+            {items.length > 1 && (
+                <div>
+                    <button
+                        onClick={() => {
+                            arrayChange(
+                                'right',
+                                items,
+                                itemIndex,
+                                setItemIndex,
+                                setContent
+                            );
+                        }}
+                    >
+                        Right
+                    </button>
+                </div>
+            )}
         </>
     );
 };

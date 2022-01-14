@@ -39,12 +39,14 @@ const ShopOverlayItem = (props) => {
                     set(foodRef, {
                         name: props.item.name,
                         amount: 1,
+                        food: props.item.food,
                     });
                     invCtx.setItems((prevState) => {
                         const newState = { ...prevState };
                         newState[props.item.name] = {
                             name: props.item.name,
                             amount: 1,
+                            food: props.item.food,
                         };
                         return newState;
                     });

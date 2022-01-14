@@ -1,0 +1,16 @@
+.progress-wrapper {
+    width: 25px;
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid black;
+    position: relative;
+}
+.progress {
+    width: 100%;
+    display: block;
+    font-family: arial;
+    font-size: 12px;
+    background-color: #28a745;
+    position: absolute;
+    bottom: 0;
+}

@@ -26,6 +26,7 @@ const RegisterForm = (props) => {
         errorMessage: '',
         isError: false,
     });
+    const needs = ['hunger', 'thirsty', 'fun', 'sleep'];
     const emailInputRef = useRef();
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
@@ -62,6 +63,17 @@ const RegisterForm = (props) => {
                         ),
                         {
                             room: element,
+                        }
+                    );
+                }
+                for (const element in needs) {
+                    set(
+                        ref(
+                            db,
+                            `users/${userCredential.user.uid}/needs/${needs[element]}`
+                        ),
+                        {
+                            status: 0,
                         }
                     );
                 }
