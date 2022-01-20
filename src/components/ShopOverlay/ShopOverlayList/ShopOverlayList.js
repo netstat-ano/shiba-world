@@ -1,8 +1,8 @@
-import ShopOverlayItem from '../ShopOverlayItem/ShopOverlayItem';
-import BackBtn from '../../UI/BackBtn/BackBtn';
+import ShopOverlayItem from "../ShopOverlayItem/ShopOverlayItem";
+import BackBtn from "../../UI/BackBtn/BackBtn";
 const ShopOverlayList = (props) => {
     const onUndoHandler = (event) => {
-        props.setUrl('');
+        props.setUrl("");
     };
     return (
         <>
@@ -18,6 +18,7 @@ const ShopOverlayList = (props) => {
             {props.items.map((element) => {
                 return (
                     <ShopOverlayItem
+                        setRerender={props.setRerender}
                         room={props.room}
                         type={props.type}
                         key={element.name}

@@ -1,14 +1,12 @@
-import styles from './ShopOverlayItem.module.scss';
-import UnvisibleButton from '../../UI/UnvisibleButton/UnvisibleButton';
-import Card from '../../UI/Card/Card';
-import { ref, set, get, runTransaction } from 'firebase/database';
-import { database } from '../../../firebase.js';
-import { getAuth } from 'firebase/auth';
-import { InventoryContext } from '../../inventory-context/InventoryContext';
-import { useContext, useState } from 'react';
+import styles from "./ShopOverlayItem.module.scss";
+import UnvisibleButton from "../../UI/UnvisibleButton/UnvisibleButton";
+import Card from "../../UI/Card/Card";
+import { ref, set, get, runTransaction } from "firebase/database";
+import { database } from "../../../firebase.js";
+import { getAuth } from "firebase/auth";
+import { useContext, useState } from "react";
 const ShopOverlayItem = (props) => {
     const [isDisabled, setIsDisabled] = useState(false);
-    const invCtx = useContext(InventoryContext);
     const auth = getAuth();
     const user = auth.currentUser;
     const timeout = (ms) => {
@@ -23,15 +21,10 @@ const ShopOverlayItem = (props) => {
         const update = get(foodRef)
             .then((snapshot) => {
                 setIsDisabled(true);
-                if (snapshot.hasChild('name')) {
+                if (snapshot.hasChild("name")) {
                     runTransaction(foodRef, (data) => {
                         if (data) {
                             data.amount++;
-                            invCtx.setItems((prevState) => {
-                                const newState = { ...prevState };
-                                newState[props.item.name] = data;
-                                return { ...newState };
-                            });
                         }
                         return data;
                     });
@@ -41,34 +34,24 @@ const ShopOverlayItem = (props) => {
                         amount: 1,
                         food: props.item.food,
                     });
-                    invCtx.setItems((prevState) => {
-                        const newState = { ...prevState };
-                        newState[props.item.name] = {
-                            name: props.item.name,
-                            amount: 1,
-                            food: props.item.food,
-                        };
-                        return newState;
-                    });
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
-
         Promise.race([
             update,
             timeout(700).then(() => {
                 setIsDisabled(false);
+                props.setRerender({});
             }),
         ]);
     };
-    console.log(invCtx.items);
 
     return (
         <Card>
-            <div className={styles['shop-item__name']}>{props.item.name}</div>
-            <div className={styles['shop-item__price']}>
+            <div className={styles["shop-item__name"]}>{props.item.name}</div>
+            <div className={styles["shop-item__price"]}>
                 {props.item.price} gold
             </div>
             <div>

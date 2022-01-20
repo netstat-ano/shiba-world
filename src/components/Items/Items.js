@@ -1,8 +1,8 @@
-import ItemsList from './ItemsList/ItemsList';
+import ItemsList from "./ItemsList/ItemsList";
 const Items = (props) => {
     return (
         <>
-            <ItemsList />
+            <ItemsList rerender={props.rerender} />
         </>
     );
 };

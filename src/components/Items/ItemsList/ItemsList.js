@@ -1,13 +1,11 @@
-import { getAuth } from 'firebase/auth';
-import { ref, get, child } from 'firebase/database';
-import { useContext, useEffect, useState } from 'react';
-import { PlaceContext } from '../../place-context/place-context';
-import { database } from '../../../firebase';
-import ItemsElements from './ItemsElements/ItemsElements';
-import { InventoryContext } from '../../inventory-context/InventoryContext';
-const ItemsList = () => {
+import { getAuth } from "firebase/auth";
+import { ref, get, child } from "firebase/database";
+import { useContext, useEffect, useState } from "react";
+import { PlaceContext } from "../../place-context/place-context";
+import { database } from "../../../firebase";
+import ItemsElements from "./ItemsElements/ItemsElements";
+const ItemsList = (props) => {
     const [inventory, setInventory] = useState({});
-    const invCtx = useContext(InventoryContext);
     const roomCtx = useContext(PlaceContext);
     const auth = getAuth();
     const user = auth.currentUser;
@@ -19,13 +17,14 @@ const ItemsList = () => {
                     const data = snapshot.val();
                     setInventory({ ...data });
                 } else {
-                    console.log('No data available');
+                    console.log("No data available");
                 }
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [roomCtx.currentRoom, dbRef, user.uid, invCtx]);
+        console.log(inventory);
+    }, [roomCtx.currentRoom, dbRef, user.uid, props.rerender]);
     return (
         <div>
             <ItemsElements inventory={inventory} />

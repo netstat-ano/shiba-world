@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import UnvisibleButton from '../../UI/UnvisibleButton/UnvisibleButton';
-import ShopOverlay from '../../ShopOverlay/ShopOverlay';
+import { useState } from "react";
+import UnvisibleButton from "../../UI/UnvisibleButton/UnvisibleButton";
+import ShopOverlay from "../../ShopOverlay/ShopOverlay";
 const Shop = (props) => {
     const [showShopingMenu, setShowShopingMenu] = useState(false);
     const clickShopHandler = (event) => {
@@ -8,9 +8,13 @@ const Shop = (props) => {
     };
     return (
         <div>
-            {showShopingMenu ? <ShopOverlay /> : ''}
+            {showShopingMenu ? (
+                <ShopOverlay setRerender={props.setRerender} />
+            ) : (
+                ""
+            )}
             <UnvisibleButton
-                button={{ type: 'submit', onClick: clickShopHandler }}
+                button={{ type: "submit", onClick: clickShopHandler }}
             >
                 Shop
             </UnvisibleButton>
