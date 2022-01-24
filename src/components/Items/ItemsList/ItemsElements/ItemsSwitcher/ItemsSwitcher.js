@@ -1,7 +1,21 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ref, runTransaction } from "firebase/database";
 import { InventoryContext } from "../../../../inventory-context/InventoryContext";
 import arrayChange from "../../../../../functions/arrayChange/arrayChange";
-import { useDrag } from "react-dnd";
+import { database } from "../../../../../firebase";
+import { auth, getAuth } from "firebase/auth";
+import { NeedsContext } from "../../../../needs-context/NeedsContext";
+
+const clearZeroAmount = (obj, set) => {
+    console.log(obj);
+    for (const element in obj) {
+        if (obj[element].amount <= 0) {
+            delete obj[element];
+        }
+    }
+    console.log(obj);
+    set({ ...obj });
+};
 const ItemsSwitcher = (props) => {
     const initContent = () => {
         for (const item in props.inventory) {
@@ -11,23 +25,54 @@ const ItemsSwitcher = (props) => {
     const initItems = () => {
         const startingState = [];
         for (const element in props.inventory) {
-            startingState.push(props.inventory[element]);
+            if (props.inventory[element].amount > 0) {
+                startingState.push(props.inventory[element]);
+            }
         }
         return startingState;
     };
-    initItems();
 
     const invCtx = useContext(InventoryContext);
+    const needsCtx = useContext(NeedsContext);
     const [itemIndex, setItemIndex] = useState(0);
     const [content, setContent] = useState(initContent());
     const [items, setItems] = useState(initItems());
+    const auth = getAuth();
+    const feed = () => {
+        if (invCtx.items.amount > 0) {
+            needsCtx.dispatchNeeds({
+                type: "add",
+                needs: "hunger",
+                howMuch: invCtx.items.food,
+            });
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const itemRef = ref(
+                database,
+                `users/${user.uid}/items/kitchen/${invCtx.items.name}`
+            );
+            runTransaction(itemRef, (element) => {
+                if (element) {
+                    if (element.amount - 1 <= 0) {
+                        element = null;
+                        setContent(items[0]);
+                        props.setRerender({});
+                    } else {
+                        element.amount--;
+                    }
+                }
 
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: "food",
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
-    }));
+                return element;
+            });
+            let newState = {};
+            invCtx.setItems((prevState) => {
+                newState = { ...prevState, amount: prevState.amount - 1 };
+                setContent({ ...newState });
+                return { ...newState };
+            });
+        }
+    };
+
     useEffect(() => {
         const update = (() => {
             let stateRef = [];
@@ -53,13 +98,12 @@ const ItemsSwitcher = (props) => {
                 const index = stateRef.findIndex(
                     (fIndex) => fIndex.name === content.name
                 );
-                if (stateRef[index].amount > 0) {
+                if (stateRef[index].amount >= 0) {
                     const newState = {
                         name: stateRef[index].name,
                         amount: stateRef[index].amount,
                     };
                     setContent({ ...newState });
-                    console.log(newState);
                     invCtx.setItems({
                         ...newState,
                         food: stateRef[index].food,
@@ -68,7 +112,6 @@ const ItemsSwitcher = (props) => {
             });
         })();
     }, [props.inventory, itemIndex]);
-    console.log(invCtx.items);
     return (
         <>
             {items.length > 1 && (
@@ -89,7 +132,7 @@ const ItemsSwitcher = (props) => {
                 </div>
             )}
             <div>
-                <span ref={drag}>
+                <span onClick={feed}>
                     {content && `${content.name} x${content.amount}`}
                 </span>
             </div>

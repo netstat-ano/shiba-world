@@ -7,7 +7,7 @@ const BottomPanel = (props) => {
     return (
         <div className={styles["bottom-panel"]}>
             <Shop setRerender={setRerender} />
-            <Items rerender={rerender} />
+            <Items setRerender={setRerender} rerender={rerender} />
             <div>Action</div>
         </div>
     );

@@ -1,6 +1,6 @@
-import ItemsSwitcher from './ItemsSwitcher/ItemsSwitcher';
-import { InventoryContext } from '../../../inventory-context/InventoryContext';
-import { useContext } from 'react';
+import ItemsSwitcher from "./ItemsSwitcher/ItemsSwitcher";
+import { InventoryContext } from "../../../inventory-context/InventoryContext";
+import { useContext } from "react";
 const ItemsElements = (props) => {
     const inventoryCtx = useContext(InventoryContext);
     delete props.inventory.room;
@@ -11,7 +11,11 @@ const ItemsElements = (props) => {
     return (
         <div>
             {invLen > 0 ? (
-                <ItemsSwitcher inventory={props.inventory} />
+                <ItemsSwitcher
+                    setRerender={props.setRerender}
+                    rerender={props.rerender}
+                    inventory={props.inventory}
+                />
             ) : (
                 <p>You don't have items</p>
             )}

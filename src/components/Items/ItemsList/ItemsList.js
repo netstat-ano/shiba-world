@@ -27,7 +27,11 @@ const ItemsList = (props) => {
     }, [roomCtx.currentRoom, dbRef, user.uid, props.rerender]);
     return (
         <div>
-            <ItemsElements inventory={inventory} />
+            <ItemsElements
+                setRerender={props.setRerender}
+                rerender={props.rerender}
+                inventory={inventory}
+            />
         </div>
     );
 };

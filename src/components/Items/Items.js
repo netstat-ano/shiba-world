@@ -2,7 +2,10 @@ import ItemsList from "./ItemsList/ItemsList";
 const Items = (props) => {
     return (
         <>
-            <ItemsList rerender={props.rerender} />
+            <ItemsList
+                setRerender={props.setRerender}
+                rerender={props.rerender}
+            />
         </>
     );
 };
