@@ -18,7 +18,6 @@ const Sleep = () => {
                     });
                     sleep();
                 } else {
-                    console.log("cleanup");
                     clearTimeout(timeoutID);
                     sleepCtx.setIsDogSleeping(false);
                 }

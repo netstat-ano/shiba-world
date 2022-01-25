@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import dog from "../../assets/img/dog.png";
+import sleepingDog from "../../assets/img/sleeping-dog.png";
 import styles from "./Dog.module.scss";
 import { NeedsContext } from "../needs-context/NeedsContext";
 import { InventoryContext } from "../inventory-context/InventoryContext";
@@ -14,7 +15,7 @@ const Dog = () => {
             <img
                 className={styles.dog}
                 alt="dog"
-                src={sleepCtx.isDogSleeping ? "sleepingdog" : dog}
+                src={sleepCtx.isDogSleeping ? sleepingDog : dog}
             ></img>
         </div>
     );

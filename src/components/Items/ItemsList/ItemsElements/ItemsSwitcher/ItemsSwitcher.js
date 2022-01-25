@@ -6,6 +6,7 @@ import { database } from "../../../../../firebase";
 import { auth, getAuth } from "firebase/auth";
 import { NeedsContext } from "../../../../needs-context/NeedsContext";
 const ItemsSwitcher = (props) => {
+    console.log(props.inventory);
     const initContent = () => {
         for (const item in props.inventory) {
             return props.inventory[item];
@@ -28,8 +29,12 @@ const ItemsSwitcher = (props) => {
     const [items, setItems] = useState(initItems());
     const feed = () => {
         if (
-            (invCtx.items.food && needsCtx.needs.hunger < 100) ||
-            (invCtx.items.drink && needsCtx.needs.thirsty < 100)
+            (invCtx.items.amount > 0 &&
+                invCtx.items.food &&
+                needsCtx.needs.hunger < 100) ||
+            (invCtx.items.amount > 0 &&
+                invCtx.items.drink &&
+                needsCtx.needs.thirsty < 100)
         ) {
             console.log("feeding");
 
@@ -69,21 +74,36 @@ const ItemsSwitcher = (props) => {
             runTransaction(itemRef, (element) => {
                 if (element) {
                     if (element.amount - 1 <= 0) {
+                        setItems((prevState) => {
+                            const newState = prevState.filter((value) => {
+                                return value.name !== element.name;
+                            });
+                            return [...newState];
+                        });
+                        invCtx.setItems((prevState) => {
+                            const newState = items.filter((value) => {
+                                return value.name !== element.name;
+                            });
+                            setContent({ ...newState[0] });
+                            return { ...newState[0] };
+                        });
                         element = null;
-                        setContent(items[0]);
                         props.setRerender({});
                     } else {
                         element.amount--;
+                        let newState = {};
+                        invCtx.setItems((prevState) => {
+                            newState = {
+                                ...prevState,
+                                amount: prevState.amount - 1,
+                            };
+                            setContent({ ...newState });
+                            return { ...newState };
+                        });
                     }
                 }
 
                 return element;
-            });
-            let newState = {};
-            invCtx.setItems((prevState) => {
-                newState = { ...prevState, amount: prevState.amount - 1 };
-                setContent({ ...newState });
-                return { ...newState };
             });
         }
     };
@@ -125,7 +145,7 @@ const ItemsSwitcher = (props) => {
                 const index = stateRef.findIndex(
                     (fIndex) => fIndex.name === content.name
                 );
-                if (stateRef[index].amount >= 0) {
+                if (index >= 0 && stateRef[index].amount >= 0) {
                     const newState = {
                         name: stateRef[index].name,
                         amount: stateRef[index].amount,
@@ -142,6 +162,7 @@ const ItemsSwitcher = (props) => {
                             drink: stateRef[index].drink,
                         });
                     }
+                } else {
                 }
             });
         })();

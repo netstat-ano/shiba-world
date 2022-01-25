@@ -1,32 +1,32 @@
-import { useRef, useState, useContext } from 'react';
-import LoginInput from '../LoginForm/LoginInput/LoginInput';
-import Card from '../UI/Card/Card';
-import inputStyles from '../LoginForm/LoginForm.module.scss';
-import styles from './RegisterForm.module.scss';
-import GreenButton from '../UI/GreenButton/GreenButton';
-import UnvisibleButton from '../UI/UnvisibleButton/UnvisibleButton';
-import validate from '../../functions/authentication/validate';
-import Alert from '../UI/Alert/Alert';
-import { getDatabase, ref, set } from 'firebase/database';
-import { PlaceContext } from '../place-context/place-context';
+import { useRef, useState, useContext } from "react";
+import LoginInput from "../LoginForm/LoginInput/LoginInput";
+import Card from "../UI/Card/Card";
+import inputStyles from "../LoginForm/LoginForm.module.scss";
+import styles from "./RegisterForm.module.scss";
+import GreenButton from "../UI/GreenButton/GreenButton";
+import UnvisibleButton from "../UI/UnvisibleButton/UnvisibleButton";
+import validate from "../../functions/authentication/validate";
+import Alert from "../UI/Alert/Alert";
+import { getDatabase, ref, set } from "firebase/database";
+import { PlaceContext } from "../place-context/place-context";
 import {
     getAuth,
     createUserWithEmailAndPassword,
     updateProfile,
-} from 'firebase/auth';
+} from "firebase/auth";
 const RegisterForm = (props) => {
     const roomCtx = useContext(PlaceContext);
     const [isValid, setIsValid] = useState({
-        username: true,
-        email: true,
-        password: true,
-        retypePassword: true,
+        username: false,
+        email: false,
+        password: false,
+        retypePassword: false,
     });
     const [catchedError, setCatchedError] = useState({
-        errorMessage: '',
+        errorMessage: "",
         isError: false,
     });
-    const needs = ['hunger', 'thirsty', 'fun', 'sleep'];
+    const needs = ["hunger", "thirsty", "fun", "sleep"];
     const emailInputRef = useRef();
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
@@ -102,7 +102,7 @@ const RegisterForm = (props) => {
             });
     };
     return (
-        <div className={inputStyles['login-form']}>
+        <div className={inputStyles["login-form"]}>
             {catchedError.isError ? (
                 <Alert
                     type="bad"
@@ -111,13 +111,13 @@ const RegisterForm = (props) => {
                     content={catchedError.errorMessage}
                 />
             ) : (
-                ''
+                ""
             )}
             <div className={styles.center}>
-                <Card className={styles['register-form']}>
+                <Card className={styles["register-form"]}>
                     <form onSubmit={onSubmitHandler}>
                         <LoginInput
-                            className={!isValid.username ? styles.invalid : ''}
+                            className={!isValid.username ? styles.invalid : ""}
                             ref={usernameInputRef}
                             id="username"
                             label="Username"
@@ -135,10 +135,10 @@ const RegisterForm = (props) => {
                                 Your username must have at least 6 characters
                             </div>
                         ) : (
-                            ''
+                            ""
                         )}
                         <LoginInput
-                            className={!isValid.email ? styles.invalid : ''}
+                            className={!isValid.email ? styles.invalid : ""}
                             ref={emailInputRef}
                             id="email"
                             label="E-mail"
@@ -156,10 +156,10 @@ const RegisterForm = (props) => {
                                 This email is incorrect
                             </div>
                         ) : (
-                            ''
+                            ""
                         )}
                         <LoginInput
-                            className={!isValid.password ? styles.invalid : ''}
+                            className={!isValid.password ? styles.invalid : ""}
                             ref={passwordInputRef}
                             id="password"
                             label="Password"
@@ -177,11 +177,11 @@ const RegisterForm = (props) => {
                                 Password must have at least 6 characters
                             </div>
                         ) : (
-                            ''
+                            ""
                         )}
                         <LoginInput
                             className={
-                                !isValid.retypePassword ? styles.invalid : ''
+                                !isValid.retypePassword ? styles.invalid : ""
                             }
                             ref={retypePasswordInputRef}
                             id="retypePassword"
@@ -201,17 +201,17 @@ const RegisterForm = (props) => {
                                 least 6 characters.
                             </div>
                         ) : (
-                            ''
+                            ""
                         )}
                         <GreenButton
                             className={styles.button}
-                            button={{ type: 'submit' }}
+                            button={{ type: "submit" }}
                         >
                             Sign up
                         </GreenButton>
                     </form>
                     <UnvisibleButton
-                        button={{ type: 'button', onClick: props.onLogin }}
+                        button={{ type: "button", onClick: props.onLogin }}
                     >
                         Click here if you already have account
                     </UnvisibleButton>
