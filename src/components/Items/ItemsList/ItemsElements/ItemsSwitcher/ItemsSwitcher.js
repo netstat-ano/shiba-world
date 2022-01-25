@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { ref, runTransaction } from "firebase/database";
+import { ref, runTransaction, set } from "firebase/database";
 import { InventoryContext } from "../../../../inventory-context/InventoryContext";
 import arrayChange from "../../../../../functions/arrayChange/arrayChange";
 import { database } from "../../../../../firebase";
@@ -21,28 +21,24 @@ const ItemsSwitcher = (props) => {
         }
         return startingState;
     };
-
-    const invCtx = useContext(InventoryContext);
     const needsCtx = useContext(NeedsContext);
     const [itemIndex, setItemIndex] = useState(0);
     const [content, setContent] = useState(initContent());
     const [items, setItems] = useState(initItems());
     const feed = () => {
         if (
-            (invCtx.items.amount > 0 &&
-                invCtx.items.food &&
+            (content.amount > 0 &&
+                content.food &&
                 needsCtx.needs.hunger < 100) ||
-            (invCtx.items.amount > 0 &&
-                invCtx.items.drink &&
+            (content.amount > 0 &&
+                content.drink &&
                 needsCtx.needs.thirsty < 100)
         ) {
-            console.log("feeding");
-
-            if (invCtx.items.food) {
+            if (content.food) {
                 needsCtx.dispatchNeeds({
                     type: "add",
                     needs: "hunger",
-                    howMuch: invCtx.items.food,
+                    howMuch: content.food,
                 });
                 if (needsCtx.needs.hunger > 100) {
                     needsCtx.dispatchNeeds({
@@ -55,7 +51,7 @@ const ItemsSwitcher = (props) => {
                 needsCtx.dispatchNeeds({
                     type: "add",
                     needs: "thirsty",
-                    howMuch: invCtx.items.drink,
+                    howMuch: content.drink,
                 });
                 if (needsCtx.needs.thirsty > 100) {
                     needsCtx.dispatchNeeds({
@@ -69,7 +65,7 @@ const ItemsSwitcher = (props) => {
             const user = auth.currentUser;
             const itemRef = ref(
                 database,
-                `users/${user.uid}/items/kitchen/${invCtx.items.name}`
+                `users/${user.uid}/items/kitchen/${content.name}`
             );
             runTransaction(itemRef, (element) => {
                 if (element) {
@@ -80,7 +76,7 @@ const ItemsSwitcher = (props) => {
                             });
                             return [...newState];
                         });
-                        invCtx.setItems((prevState) => {
+                        setContent((prevState) => {
                             const newState = items.filter((value) => {
                                 return value.name !== element.name;
                             });
@@ -90,9 +86,10 @@ const ItemsSwitcher = (props) => {
                         element = null;
                         props.setRerender({});
                     } else {
-                        element.amount--;
+                        console.log("--");
+                        element.amount -= 1;
                         let newState = {};
-                        invCtx.setItems((prevState) => {
+                        setContent((prevState) => {
                             newState = {
                                 ...prevState,
                                 amount: prevState.amount - 1,
@@ -152,12 +149,12 @@ const ItemsSwitcher = (props) => {
                     };
                     setContent({ ...newState });
                     if (stateRef[index].food) {
-                        invCtx.setItems({
+                        setContent({
                             ...newState,
                             food: stateRef[index].food,
                         });
                     } else {
-                        invCtx.setItems({
+                        setContent({
                             ...newState,
                             drink: stateRef[index].drink,
                         });
