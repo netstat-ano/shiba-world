@@ -7,21 +7,24 @@ import Dog from "../Dog/Dog";
 import NeedsContextProvider from "../needs-context/NeedsContext";
 import DragDropContextProvider from "../DragDropContextProvider/DragDropContextProvider";
 import Needs from "../Needs/Needs";
+import SleepContextProvider from "../sleep-context/SleepContext";
 const Game = (props) => {
     return (
-        <div className={styles["bottom-panel"]}>
-            <PlaceContextProvider>
-                <ChangeRoom />
-                <NeedsContextProvider>
-                    <Needs />
-                    <DragDropContextProvider>
-                        <InventoryContextProvider>
-                            <Dog />
-                            <BottomPanel />
-                        </InventoryContextProvider>
-                    </DragDropContextProvider>
-                </NeedsContextProvider>
-            </PlaceContextProvider>
+        <div>
+            <SleepContextProvider>
+                <PlaceContextProvider>
+                    <ChangeRoom />
+                    <NeedsContextProvider>
+                        <Needs />
+                        <DragDropContextProvider>
+                            <InventoryContextProvider>
+                                <Dog />
+                                <BottomPanel />
+                            </InventoryContextProvider>
+                        </DragDropContextProvider>
+                    </NeedsContextProvider>
+                </PlaceContextProvider>
+            </SleepContextProvider>
         </div>
     );
 };

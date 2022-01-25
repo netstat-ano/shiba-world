@@ -28,11 +28,17 @@ const ShopOverlayItem = (props) => {
                         }
                         return data;
                     });
-                } else {
+                } else if (props.item.food) {
                     set(foodRef, {
                         name: props.item.name,
                         amount: 1,
                         food: props.item.food,
+                    });
+                } else {
+                    set(foodRef, {
+                        name: props.item.name,
+                        amount: 1,
+                        drink: props.item.drink,
                     });
                 }
             })

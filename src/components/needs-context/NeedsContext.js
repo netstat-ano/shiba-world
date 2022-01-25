@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
-import { ref, get, child, runTransaction } from 'firebase/database';
-import { database } from '../../firebase';
-import { getAuth } from 'firebase/auth';
+import React, { useEffect, useReducer } from "react";
+import { ref, get, child, runTransaction } from "firebase/database";
+import { database } from "../../firebase";
+import { getAuth } from "firebase/auth";
 const INITIAL_NEEDS = {
     hunger: 0,
     thirsty: 0,
@@ -17,12 +17,16 @@ export const NeedsContext = React.createContext({
 });
 
 const reduceNeeds = (state, action) => {
-    if (action.type === 'add') {
+    if (action.type === "add") {
         state[`${action.needs}`] =
             Number(state[`${action.needs}`]) + Number(action.howMuch);
         return { ...state };
-    } else if (action.type === 'set') {
+    } else if (action.type === "set") {
         return { ...action.data };
+    } else if (action.type === "minus") {
+        state[`${action.needs}`] =
+            Number(state[`${action.needs}`]) - Number(action.howMuch);
+        return { ...state };
     }
 };
 
@@ -42,9 +46,9 @@ const NeedsContextProvider = (props) => {
             .then((snapshot) => {
                 console.log(snapshot.val().needs);
                 if (snapshot.exists()) {
-                    dispatchNeeds({type:'set', data: snapshot.val().needs});
+                    dispatchNeeds({ type: "set", data: snapshot.val().needs });
                 } else {
-                    console.log('No data available');
+                    console.log("No data available");
                 }
             })
             .catch((error) => {

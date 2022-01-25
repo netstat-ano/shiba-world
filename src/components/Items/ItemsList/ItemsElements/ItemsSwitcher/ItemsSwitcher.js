@@ -5,17 +5,6 @@ import arrayChange from "../../../../../functions/arrayChange/arrayChange";
 import { database } from "../../../../../firebase";
 import { auth, getAuth } from "firebase/auth";
 import { NeedsContext } from "../../../../needs-context/NeedsContext";
-
-const clearZeroAmount = (obj, set) => {
-    console.log(obj);
-    for (const element in obj) {
-        if (obj[element].amount <= 0) {
-            delete obj[element];
-        }
-    }
-    console.log(obj);
-    set({ ...obj });
-};
 const ItemsSwitcher = (props) => {
     const initContent = () => {
         for (const item in props.inventory) {
@@ -37,14 +26,40 @@ const ItemsSwitcher = (props) => {
     const [itemIndex, setItemIndex] = useState(0);
     const [content, setContent] = useState(initContent());
     const [items, setItems] = useState(initItems());
-    const auth = getAuth();
     const feed = () => {
-        if (invCtx.items.amount > 0) {
-            needsCtx.dispatchNeeds({
-                type: "add",
-                needs: "hunger",
-                howMuch: invCtx.items.food,
-            });
+        if (
+            (invCtx.items.food && needsCtx.needs.hunger < 100) ||
+            (invCtx.items.drink && needsCtx.needs.thirsty < 100)
+        ) {
+            console.log("feeding");
+
+            if (invCtx.items.food) {
+                needsCtx.dispatchNeeds({
+                    type: "add",
+                    needs: "hunger",
+                    howMuch: invCtx.items.food,
+                });
+                if (needsCtx.needs.hunger > 100) {
+                    needsCtx.dispatchNeeds({
+                        type: "minus",
+                        needs: "hunger",
+                        howMuch: needsCtx.needs.hunger - 100,
+                    });
+                }
+            } else {
+                needsCtx.dispatchNeeds({
+                    type: "add",
+                    needs: "thirsty",
+                    howMuch: invCtx.items.drink,
+                });
+                if (needsCtx.needs.thirsty > 100) {
+                    needsCtx.dispatchNeeds({
+                        type: "minus",
+                        needs: "thirsty",
+                        howMuch: needsCtx.needs.thirsty - 100,
+                    });
+                }
+            }
             const auth = getAuth();
             const user = auth.currentUser;
             const itemRef = ref(
@@ -80,14 +95,26 @@ const ItemsSwitcher = (props) => {
                 setItems("");
                 for (const item in props.inventory) {
                     setItems((prevState) => {
-                        const newState = [
-                            ...prevState,
-                            {
-                                name: props.inventory[item].name,
-                                amount: props.inventory[item].amount,
-                                food: props.inventory[item].food,
-                            },
-                        ];
+                        let newState = [];
+                        if (props.inventory[item].food) {
+                            newState = [
+                                ...prevState,
+                                {
+                                    name: props.inventory[item].name,
+                                    amount: props.inventory[item].amount,
+                                    food: props.inventory[item].food,
+                                },
+                            ];
+                        } else {
+                            newState = [
+                                ...prevState,
+                                {
+                                    name: props.inventory[item].name,
+                                    amount: props.inventory[item].amount,
+                                    drink: props.inventory[item].drink,
+                                },
+                            ];
+                        }
                         stateRef[0] = newState;
                         return newState;
                     });
@@ -104,10 +131,17 @@ const ItemsSwitcher = (props) => {
                         amount: stateRef[index].amount,
                     };
                     setContent({ ...newState });
-                    invCtx.setItems({
-                        ...newState,
-                        food: stateRef[index].food,
-                    });
+                    if (stateRef[index].food) {
+                        invCtx.setItems({
+                            ...newState,
+                            food: stateRef[index].food,
+                        });
+                    } else {
+                        invCtx.setItems({
+                            ...newState,
+                            drink: stateRef[index].drink,
+                        });
+                    }
                 }
             });
         })();
