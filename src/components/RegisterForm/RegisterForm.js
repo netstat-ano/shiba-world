@@ -55,6 +55,12 @@ const RegisterForm = (props) => {
         createUserWithEmailAndPassword(auth, emailValue, passwordValue)
             .then((userCredential) => {
                 const db = getDatabase();
+                set(ref(db, `users/${userCredential.user.uid}/gold`), {
+                    value: 800,
+                });
+                set(ref(db, `users/${userCredential.user.uid}/lastBath`), {
+                    value: 0,
+                });
                 for (const element of roomCtx.availableRooms) {
                     set(
                         ref(
