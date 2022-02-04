@@ -10,56 +10,81 @@ const INIT_MOVE = {
     thirdRow: ["", "", ""],
 };
 const AiMove = (board, dispatchBoard, setTurn) => {
-    const randomRow = Math.floor(Math.random() * 3 + 1);
-    const randomArea = Math.floor(Math.random() * 2);
+    const freePlaces = [];
     let haveFreePlaces = false;
     for (const row in board) {
-        for (const element of board[row]) {
+        board[row].forEach((element, index) => {
             if (element === "") {
-                haveFreePlaces = true;
-                break;
-            }
-        }
-    }
-    if (haveFreePlaces) {
-        if (randomRow === 1) {
-            if (board.firstRow[randomArea] === "") {
-                dispatchBoard({
-                    row: "firstRow",
-                    index: randomArea,
-                    move: "o",
+                freePlaces.push({
+                    row: row,
+                    index: index,
                 });
-                setTurn("player");
-            } else {
-                AiMove(board, dispatchBoard, setTurn);
-                return;
+                haveFreePlaces = true;
             }
+        });
+    }
+    const randomRow = Math.floor(Math.random() * 3 + 1);
+    if (haveFreePlaces) {
+        console.log(freePlaces);
+        if (randomRow === 1) {
+            const index = [];
+            for (const element of freePlaces) {
+                console.log(element);
+                if (element.row === "firstRow") {
+                    index.push(element.index);
+                }
+            }
+            let randomArea = 0;
+            if (index.length > 1) {
+                randomArea = Math.floor(Math.random() * index.length);
+            }
+            console.log(index);
+            dispatchBoard({
+                row: "firstRow",
+                index: index[randomArea],
+                move: "o",
+            });
+            setTurn("player");
         }
         if (randomRow === 2) {
-            if (board.secondRow[randomArea] === "") {
-                dispatchBoard({
-                    row: "secondRow",
-                    index: randomArea,
-                    move: "o",
-                });
-                setTurn("player");
-            } else {
-                AiMove(board, dispatchBoard, setTurn);
-                return;
+            const index = [];
+            for (const element of freePlaces) {
+                console.log(element);
+                if (element.row === "secondRow") {
+                    index.push(element.index);
+                }
             }
+            let randomArea = 0;
+            if (index.length > 1) {
+                randomArea = Math.floor(Math.random() * index.length);
+            }
+            console.log(index);
+            dispatchBoard({
+                row: "secondRow",
+                index: index[randomArea],
+                move: "o",
+            });
+            setTurn("player");
         }
         if (randomRow === 3) {
-            if (board.thirdRow[randomArea] === "") {
-                dispatchBoard({
-                    row: "thirdRow",
-                    index: randomArea,
-                    move: "o",
-                });
-                setTurn("player");
-            } else {
-                AiMove(board, dispatchBoard, setTurn);
-                return;
+            const index = [];
+            for (const element of freePlaces) {
+                console.log(element);
+                if (element.row === "thirdRow") {
+                    index.push(element.index);
+                }
             }
+            let randomArea = 0;
+            if (index.length > 1) {
+                randomArea = Math.floor(Math.random() * index.length);
+            }
+            console.log(index);
+            dispatchBoard({
+                row: "thirdRow",
+                index: index[randomArea],
+                move: "o",
+            });
+            setTurn("player");
         }
     }
 };
@@ -102,14 +127,12 @@ const TicTacToe = (props) => {
                 state.firstRow[2] === state.secondRow[2] &&
                 state.secondRow[2] === state.thirdRow[2])
         ) {
-            console.log("koniec");
             setResult(turn);
         }
         return { ...state };
     };
     const [board, dispatchBoard] = useReducer(reduceMove, { ...INIT_MOVE });
     const onConfirmHandler = () => {
-        console.log("click");
         setResult(null);
         setTurn("player");
         dispatchBoard({ type: "reset" });
@@ -122,7 +145,10 @@ const TicTacToe = (props) => {
     return (
         <div className={styles["tic-tac-toe"]}>
             {result !== null && (
-                <AlertClickPortal onConfirm={onConfirmHandler} />
+                <AlertClickPortal
+                    title={`${result} has won`}
+                    onConfirm={onConfirmHandler}
+                />
             )}
             <div onClick={props.onUndo}>X</div>
             <div className={result !== null ? styles.overlay : ""}>

@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 const AlertClick = (props) => {
     return (
-        <div>
+        <div className="center">
             <div>{props.title}</div>
             <hr></hr>
             <div>{props.content}</div>
