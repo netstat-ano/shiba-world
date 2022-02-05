@@ -3,11 +3,19 @@ import GameArea from "./GameArea/GameArea";
 import ClearBoth from "../UI/ClearBoth/ClearBoth";
 import styles from "./TicTacToe.module.scss";
 import AlertClickPortal from "../UI/AlertClick/AlertClick";
-import { useEffect, useReducer, useState } from "react";
+import { GoldContext } from "../gold-context/GoldContext";
+import { useContext, useEffect, useReducer, useState } from "react";
+
 const INIT_MOVE = {
     firstRow: ["", "", ""],
     secondRow: ["", "", ""],
     thirdRow: ["", "", ""],
+};
+const reset = (setResult, setTurn, dispatchBoard) => {
+    console.log("reset");
+    setResult(null);
+    setTurn("player");
+    dispatchBoard({ type: "reset" });
 };
 const AiMove = (board, dispatchBoard, setTurn) => {
     const freePlaces = [];
@@ -25,11 +33,9 @@ const AiMove = (board, dispatchBoard, setTurn) => {
     }
     const randomRow = Math.floor(Math.random() * 3 + 1);
     if (haveFreePlaces) {
-        console.log(freePlaces);
         if (randomRow === 1) {
             const index = [];
             for (const element of freePlaces) {
-                console.log(element);
                 if (element.row === "firstRow") {
                     index.push(element.index);
                 }
@@ -38,7 +44,6 @@ const AiMove = (board, dispatchBoard, setTurn) => {
             if (index.length > 1) {
                 randomArea = Math.floor(Math.random() * index.length);
             }
-            console.log(index);
             dispatchBoard({
                 row: "firstRow",
                 index: index[randomArea],
@@ -49,7 +54,6 @@ const AiMove = (board, dispatchBoard, setTurn) => {
         if (randomRow === 2) {
             const index = [];
             for (const element of freePlaces) {
-                console.log(element);
                 if (element.row === "secondRow") {
                     index.push(element.index);
                 }
@@ -58,7 +62,6 @@ const AiMove = (board, dispatchBoard, setTurn) => {
             if (index.length > 1) {
                 randomArea = Math.floor(Math.random() * index.length);
             }
-            console.log(index);
             dispatchBoard({
                 row: "secondRow",
                 index: index[randomArea],
@@ -69,7 +72,6 @@ const AiMove = (board, dispatchBoard, setTurn) => {
         if (randomRow === 3) {
             const index = [];
             for (const element of freePlaces) {
-                console.log(element);
                 if (element.row === "thirdRow") {
                     index.push(element.index);
                 }
@@ -78,7 +80,6 @@ const AiMove = (board, dispatchBoard, setTurn) => {
             if (index.length > 1) {
                 randomArea = Math.floor(Math.random() * index.length);
             }
-            console.log(index);
             dispatchBoard({
                 row: "thirdRow",
                 index: index[randomArea],
@@ -91,7 +92,7 @@ const AiMove = (board, dispatchBoard, setTurn) => {
 const TicTacToe = (props) => {
     const [result, setResult] = useState(null);
     const [turn, setTurn] = useState("player");
-
+    const goldCtx = useContext(GoldContext);
     const reduceMove = (state, action) => {
         if (action.type === "reset") {
             return {
@@ -127,16 +128,23 @@ const TicTacToe = (props) => {
                 state.firstRow[2] === state.secondRow[2] &&
                 state.secondRow[2] === state.thirdRow[2])
         ) {
-            setResult(turn);
+            setResult(action.move);
+            if (action.move === "x") {
+                goldCtx.setGold((prevState) => (prevState += 2.5));
+            }
+            setTurn(null);
         }
         return { ...state };
     };
     const [board, dispatchBoard] = useReducer(reduceMove, { ...INIT_MOVE });
     const onConfirmHandler = () => {
-        setResult(null);
-        setTurn("player");
-        dispatchBoard({ type: "reset" });
+        reset(setResult, setTurn, dispatchBoard);
     };
+
+    useEffect(() => {
+        dispatchBoard({ type: "reset" });
+    }, []);
+
     useEffect(() => {
         if (turn === "ai") {
             AiMove(board, dispatchBoard, setTurn);
@@ -150,7 +158,14 @@ const TicTacToe = (props) => {
                     onConfirm={onConfirmHandler}
                 />
             )}
-            <div onClick={props.onUndo}>X</div>
+            <div
+                onClick={() => {
+                    reset(setResult, setTurn, dispatchBoard);
+                    props.onUndo();
+                }}
+            >
+                X
+            </div>
             <div className={result !== null ? styles.overlay : ""}>
                 <GameArea
                     turn={turn}

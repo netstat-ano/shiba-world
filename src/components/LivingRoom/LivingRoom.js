@@ -1,8 +1,8 @@
-import UnvisibleButton from "../components/UI/UnvisibleButton/UnvisibleButton";
-import { database } from "../firebase";
+import UnvisibleButton from "../UI/UnvisibleButton/UnvisibleButton";
+import { database } from "../../firebase";
 import { get, child, ref } from "firebase/database";
-import TicTacToePortal from "../components/TicTacToe/TicTacToe";
-import Overlay from "../components/UI/Overlay/Overlay";
+import TicTacToePortal from "../TicTacToe/TicTacToe";
+import Overlay from "../UI/Overlay/Overlay";
 import { useEffect, useState } from "react";
 const LivingRoom = (props) => {
     const [isOverlayShowed, setIsOverlayShowed] = useState(false);
