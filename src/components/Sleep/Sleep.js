@@ -10,7 +10,7 @@ const Sleep = () => {
         const sleep = () => {
             const timeoutID = setTimeout(() => {
                 sleepProgress += 5;
-                if (sleepProgress < 70) {
+                if (sleepProgress < 100 && !sleepCtx.isDogSleeping) {
                     needsCtx.dispatchNeeds({
                         type: "add",
                         needs: "sleep",

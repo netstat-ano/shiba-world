@@ -5,7 +5,7 @@ import styles from "./TicTacToe.module.scss";
 import AlertClickPortal from "../UI/AlertClick/AlertClick";
 import { GoldContext } from "../gold-context/GoldContext";
 import { useContext, useEffect, useReducer, useState } from "react";
-
+import { NeedsContext } from "../needs-context/NeedsContext";
 const INIT_MOVE = {
     firstRow: ["", "", ""],
     secondRow: ["", "", ""],
@@ -31,7 +31,29 @@ const AiMove = (board, dispatchBoard, setTurn) => {
             }
         });
     }
-    const randomRow = Math.floor(Math.random() * 3 + 1);
+
+    const rowsArr = freePlaces.map((e) => e.row);
+    let randomRow = Math.floor(Math.random() * 3 + 1);
+    const rows = rowsArr.join(" ");
+    console.log(rows);
+    if (randomRow === 1) {
+        if (!rows.includes("firstRow")) {
+            AiMove(board, dispatchBoard, setTurn);
+            return;
+        }
+    } else if (randomRow === 2) {
+        if (!rows.includes("secondRow")) {
+            AiMove(board, dispatchBoard, setTurn);
+            return;
+        }
+    } else if (randomRow === 3) {
+        if (!rows.includes("thirdRow")) {
+            AiMove(board, dispatchBoard, setTurn);
+            return;
+        }
+    }
+    console.log(freePlaces);
+    console.log(randomRow);
     if (haveFreePlaces) {
         if (randomRow === 1) {
             const index = [];
@@ -90,6 +112,7 @@ const AiMove = (board, dispatchBoard, setTurn) => {
     }
 };
 const TicTacToe = (props) => {
+    const needsCtx = useContext(NeedsContext);
     const [result, setResult] = useState(null);
     const [turn, setTurn] = useState("player");
     const goldCtx = useContext(GoldContext);
@@ -131,6 +154,22 @@ const TicTacToe = (props) => {
             setResult(action.move);
             if (action.move === "x") {
                 goldCtx.setGold((prevState) => (prevState += 2.5));
+                needsCtx.dispatchNeeds({
+                    needs: "sleep",
+                    type: "minus",
+                    howMuch: 5,
+                });
+                needsCtx.dispatchNeeds({
+                    needs: "hunger",
+                    type: "minus",
+                    howMuch: 5,
+                });
+                needsCtx.dispatchNeeds({
+                    needs: "thirsty",
+                    type: "minus",
+                    howMuch: 10,
+                });
+                needsCtx.saveCurrentContextToDatabase();
             }
             setTurn(null);
         }

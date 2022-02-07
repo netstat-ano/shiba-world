@@ -59,7 +59,11 @@ const NeedsContextProvider = (props) => {
         runTransaction(needsRef, (needsDb) => {
             if (needsDb) {
                 for (const need in needs) {
-                    needsDb[need] = needs[need];
+                    if (needs[need] >= 0) {
+                        needsDb[need] = needs[need];
+                    } else {
+                        needsDb[need] = 0;
+                    }
                 }
             }
             return needsDb;
