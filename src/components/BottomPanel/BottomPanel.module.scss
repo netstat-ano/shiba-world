@@ -1,13 +1,15 @@
-.bottom-panel{
+.bottom-panel {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     background-color: #2c7bc5;
     position: relative;
     z-index: 1;
-    margin-top: 30vh;
+    bottom: 0;
+    height: 70px;
 }
-.bottom-panel div, .bottom-panel div button{
-    padding: .25rem;
+.bottom-panel div,
+.bottom-panel div button {
+    padding: 0.25rem;
     text-align: center;
     color: white;
 }

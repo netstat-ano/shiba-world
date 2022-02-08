@@ -11,14 +11,14 @@ const GardenWork = () => {
                 howMuch: "20",
             });
         }
-        if (needsCtx.needs.thirsty >= 15) {
+        if (needsCtx.needs.thirsty >= 14) {
             needsCtx.dispatchNeeds({
                 type: "minus",
                 needs: "thirsty",
                 howMuch: "15",
             });
         }
-        if (needsCtx.needs.hunger >= 10) {
+        if (needsCtx.needs.hunger >= 9) {
             needsCtx.dispatchNeeds({
                 type: "minus",
                 needs: "hunger",

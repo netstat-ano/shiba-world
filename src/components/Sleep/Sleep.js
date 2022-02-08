@@ -7,28 +7,44 @@ const Sleep = () => {
     const sleepCtx = useContext(SleepContext);
     const onSleep = () => {
         let sleepProgress = needsCtx.needs.sleep;
-        const sleep = () => {
-            const timeoutID = setTimeout(() => {
-                sleepProgress += 5;
-                if (sleepProgress < 100 && !sleepCtx.isDogSleeping) {
-                    needsCtx.dispatchNeeds({
-                        type: "add",
-                        needs: "sleep",
-                        howMuch: 4,
-                    });
-                    sleep();
-                } else {
+        const sleep = (isSleeping) => {
+            if (isSleeping) {
+                return new Promise((resolve, reject) => {
+                    const timeoutID = setTimeout(() => {
+                        sleepProgress += 5;
+                        if (sleepProgress < 100) {
+                            needsCtx.dispatchNeeds({
+                                type: "add",
+                                needs: "sleep",
+                                howMuch: 4,
+                            });
+                            resolve([timeoutID, true]);
+                        } else {
+                            sleepProgress = 100;
+                            resolve([timeoutID, false]);
+                        }
+                    }, 1000);
+                }).then((response) => {
+                    const [timeoutID, isSleeping] = response;
                     clearTimeout(timeoutID);
-                    sleepCtx.setIsDogSleeping(false);
-                }
-            }, 1000);
+                    if (!sleepCtx.isDogSleeping) {
+                        sleep(false);
+                    } else {
+                        sleep(isSleeping);
+                    }
+                });
+            } else {
+                sleepCtx.setIsDogSleeping(false);
+            }
         };
 
         if (sleepCtx.isDogSleeping) {
-            sleepCtx.setIsDogSleeping(false);
+            console.log("stop");
+            sleep(false);
         } else {
+            console.log("init");
             sleepCtx.setIsDogSleeping(true);
-            sleep();
+            sleep(true);
         }
     };
     return (

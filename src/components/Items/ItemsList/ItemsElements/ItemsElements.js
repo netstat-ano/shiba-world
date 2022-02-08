@@ -1,4 +1,5 @@
 import ItemsSwitcher from "./ItemsSwitcher/ItemsSwitcher";
+import styles from "./ItemsElements.module.scss";
 const ItemsElements = (props) => {
     delete props.inventory.room;
     let invLen = 0;
@@ -6,7 +7,7 @@ const ItemsElements = (props) => {
         invLen++;
     }
     return (
-        <div>
+        <div className={styles.control}>
             {invLen > 0 ? (
                 <ItemsSwitcher
                     setRerender={props.setRerender}

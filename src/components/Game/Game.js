@@ -11,19 +11,18 @@ import Needs from "../Needs/Needs";
 import SleepContextProvider from "../sleep-context/SleepContext";
 import { useState } from "react";
 const Game = (props) => {
-    const [gameMode, setGameMode] = useState(false);
     return (
-        <div>
+        <div id="game" className={styles.game}>
             <GoldContextProvider>
-                {!gameMode && <Gold />}
+                {!props.gameMode && <Gold />}
                 <SleepContextProvider>
                     <PlaceContextProvider>
-                        {!gameMode && <ChangeRoom />}
+                        {!props.gameMode && <ChangeRoom />}
                         <NeedsContextProvider>
-                            {!gameMode && <Needs />}
+                            {!props.gameMode && <Needs />}
                             <DragDropContextProvider>
-                                {!gameMode && <Dog />}
-                                <BottomPanel setGameMode={setGameMode} />
+                                {!props.gameMode && <Dog />}
+                                <BottomPanel setGameMode={props.setGameMode} />
                             </DragDropContextProvider>
                         </NeedsContextProvider>
                     </PlaceContextProvider>

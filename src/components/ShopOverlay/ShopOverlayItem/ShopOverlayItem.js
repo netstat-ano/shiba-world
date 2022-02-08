@@ -6,6 +6,7 @@ import { database } from "../../../firebase.js";
 import { getAuth } from "firebase/auth";
 import { GoldContext } from "../../gold-context/GoldContext";
 import { useContext, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ShopOverlayItem = (props) => {
     const [isDisabled, setIsDisabled] = useState(false);
     const goldCtx = useContext(GoldContext);
@@ -60,13 +61,23 @@ const ShopOverlayItem = (props) => {
             ]);
         }
     };
-
+    console.log(props.item);
     return (
         <Card>
             <div className={styles["shop-item__name"]}>{props.item.name}</div>
             <div className={styles["shop-item__price"]}>
                 {props.item.price} gold
             </div>
+            {props.item.food && (
+                <div>
+                    <FontAwesomeIcon icon="bone" />
+                </div>
+            )}
+            {props.item.drink && (
+                <div>
+                    <FontAwesomeIcon icon="tint" />
+                </div>
+            )}
             <div>
                 <UnvisibleButton
                     button={{ onClick: onBuyHandler, disabled: isDisabled }}

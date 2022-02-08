@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { ref, runTransaction, set } from "firebase/database";
-import { InventoryContext } from "../../../../inventory-context/InventoryContext";
+import ArrowButton from "../../../../UI/ArrowButton/ArrowButton";
 import arrayChange from "../../../../../functions/arrayChange/arrayChange";
 import { database } from "../../../../../firebase";
-import { auth, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { NeedsContext } from "../../../../needs-context/NeedsContext";
 const ItemsSwitcher = (props) => {
     console.log(props.inventory);
@@ -168,19 +168,20 @@ const ItemsSwitcher = (props) => {
         <>
             {items.length > 1 && (
                 <div>
-                    <button
-                        onClick={() => {
-                            arrayChange(
-                                "left",
-                                items,
-                                itemIndex,
-                                setItemIndex,
-                                setContent
-                            );
+                    <ArrowButton
+                        direction="left"
+                        button={{
+                            onClick: () => {
+                                arrayChange(
+                                    "left",
+                                    items,
+                                    itemIndex,
+                                    setItemIndex,
+                                    setContent
+                                );
+                            },
                         }}
-                    >
-                        Left
-                    </button>
+                    />
                 </div>
             )}
             <div>
@@ -190,19 +191,20 @@ const ItemsSwitcher = (props) => {
             </div>
             {items.length > 1 && (
                 <div>
-                    <button
-                        onClick={() => {
-                            arrayChange(
-                                "right",
-                                items,
-                                itemIndex,
-                                setItemIndex,
-                                setContent
-                            );
+                    <ArrowButton
+                        direction="right"
+                        button={{
+                            onClick: () => {
+                                arrayChange(
+                                    "right",
+                                    items,
+                                    itemIndex,
+                                    setItemIndex,
+                                    setContent
+                                );
+                            },
                         }}
-                    >
-                        Right
-                    </button>
+                    />
                 </div>
             )}
         </>
