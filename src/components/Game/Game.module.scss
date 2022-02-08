@@ -2,6 +2,11 @@
     display: grid;
     grid-template-rows: 10px 50px 40px 1fr;
     max-width: 425px;
-    border: 1px solid black;
+    height: 100vh;
+}
+.game-mode {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    max-width: 425px;
     height: 100vh;
 }

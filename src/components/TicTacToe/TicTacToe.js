@@ -17,7 +17,7 @@ const reset = (setResult, setTurn, dispatchBoard) => {
     setTurn("player");
     dispatchBoard({ type: "reset" });
 };
-const AiMove = (board, dispatchBoard, setTurn) => {
+const AiMove = (board, dispatchBoard, setTurn, setResult) => {
     const freePlaces = [];
     let haveFreePlaces = false;
     for (const row in board) {
@@ -38,17 +38,17 @@ const AiMove = (board, dispatchBoard, setTurn) => {
     console.log(rows);
     if (randomRow === 1) {
         if (!rows.includes("firstRow")) {
-            AiMove(board, dispatchBoard, setTurn);
+            AiMove(board, dispatchBoard, setTurn, setResult);
             return;
         }
     } else if (randomRow === 2) {
         if (!rows.includes("secondRow")) {
-            AiMove(board, dispatchBoard, setTurn);
+            AiMove(board, dispatchBoard, setTurn, setResult);
             return;
         }
     } else if (randomRow === 3) {
         if (!rows.includes("thirdRow")) {
-            AiMove(board, dispatchBoard, setTurn);
+            AiMove(board, dispatchBoard, setTurn, setResult);
             return;
         }
     }
@@ -109,6 +109,8 @@ const AiMove = (board, dispatchBoard, setTurn) => {
             });
             setTurn("player");
         }
+    } else {
+        setResult("No one");
     }
 };
 const TicTacToe = (props) => {
@@ -153,7 +155,9 @@ const TicTacToe = (props) => {
         ) {
             setResult(action.move);
             if (action.move === "x") {
-                goldCtx.setGold((prevState) => (prevState += 2.5));
+                goldCtx.setGold((prevState) => {
+                    prevState += 2.5;
+                });
                 needsCtx.dispatchNeeds({
                     needs: "sleep",
                     type: "minus",
@@ -186,13 +190,14 @@ const TicTacToe = (props) => {
 
     useEffect(() => {
         if (turn === "ai") {
-            AiMove(board, dispatchBoard, setTurn);
+            AiMove(board, dispatchBoard, setTurn, setResult);
         }
     }, [turn]);
     return (
         <div className={styles["tic-tac-toe"]}>
             {result !== null && (
                 <AlertClickPortal
+                    className={styles["win-alert"]}
                     title={`${result} has won`}
                     onConfirm={onConfirmHandler}
                 />

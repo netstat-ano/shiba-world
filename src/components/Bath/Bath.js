@@ -1,8 +1,8 @@
 import { getAuth } from "firebase/auth";
-import UnvisibleButton from "../components/UI/UnvisibleButton/UnvisibleButton";
+import UnvisibleButton from "../UI/UnvisibleButton/UnvisibleButton";
 import { get, ref, runTransaction } from "firebase/database";
-import { database } from "../firebase";
-import { GoldContext } from "../components/gold-context/GoldContext";
+import { database } from "../../firebase";
+import { GoldContext } from "../gold-context/GoldContext";
 import { useContext } from "react";
 const Bath = () => {
     const goldCtx = useContext(GoldContext);
@@ -24,7 +24,9 @@ const Bath = () => {
             });
         }).then((is) => {
             if (is) {
-                goldCtx.setGold((prevState) => prevState + 10);
+                goldCtx.setGold((prevState) => {
+                    return { change: 20, value: prevState + 10 };
+                });
             }
         });
     };

@@ -45,6 +45,7 @@ const GoldContextProvider = (props) => {
                 console.error(error);
             });
     }, []);
+
     saveGoldToDatabase(gold);
     return (
         <GoldContext.Provider
