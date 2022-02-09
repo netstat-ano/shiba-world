@@ -36,24 +36,24 @@ const AiMove = (board, dispatchBoard, setTurn, setResult) => {
     let randomRow = Math.floor(Math.random() * 3 + 1);
     const rows = rowsArr.join(" ");
     console.log(rows);
-    if (randomRow === 1) {
-        if (!rows.includes("firstRow")) {
-            AiMove(board, dispatchBoard, setTurn, setResult);
-            return;
-        }
-    } else if (randomRow === 2) {
-        if (!rows.includes("secondRow")) {
-            AiMove(board, dispatchBoard, setTurn, setResult);
-            return;
-        }
-    } else if (randomRow === 3) {
-        if (!rows.includes("thirdRow")) {
-            AiMove(board, dispatchBoard, setTurn, setResult);
-            return;
+    if (haveFreePlaces) {
+        if (randomRow === 1) {
+            if (!rows.includes("firstRow")) {
+                AiMove(board, dispatchBoard, setTurn, setResult);
+                return;
+            }
+        } else if (randomRow === 2) {
+            if (!rows.includes("secondRow")) {
+                AiMove(board, dispatchBoard, setTurn, setResult);
+                return;
+            }
+        } else if (randomRow === 3) {
+            if (!rows.includes("thirdRow")) {
+                AiMove(board, dispatchBoard, setTurn, setResult);
+                return;
+            }
         }
     }
-    console.log(freePlaces);
-    console.log(randomRow);
     if (haveFreePlaces) {
         if (randomRow === 1) {
             const index = [];
@@ -155,9 +155,7 @@ const TicTacToe = (props) => {
         ) {
             setResult(action.move);
             if (action.move === "x") {
-                goldCtx.setGold((prevState) => {
-                    prevState += 2.5;
-                });
+                goldCtx.dispatchGold({ type: "add", howMuch: 2.5 });
                 needsCtx.dispatchNeeds({
                     needs: "sleep",
                     type: "minus",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import {
     ref,
     child,
@@ -26,9 +26,25 @@ const saveGoldToDatabase = (gold) => {
         });
     }
 };
-
+const reduceGold = (state, action) => {
+    if (action.type === "add") {
+        state.gold += action.howMuch;
+    } else if (action.type === "minus") {
+        state.gold -= action.howMuch;
+    } else if (action.type === "set") {
+        state.gold = action.value;
+        return { ...state };
+    }
+    state.change = action.howMuch;
+    state.lastOperation = action.type;
+    return { ...state };
+};
 const GoldContextProvider = (props) => {
-    const [gold, setGold] = useState();
+    const [gold, dispatchGold] = useReducer(reduceGold, {
+        gold: 0,
+        change: 0,
+        lastOperation: null,
+    });
     useEffect(() => {
         const db = ref(database);
         const auth = getAuth();
@@ -36,7 +52,7 @@ const GoldContextProvider = (props) => {
         get(child(db, `users/${user.uid}/gold`))
             .then((snapshot) => {
                 if (snapshot.exists()) {
-                    setGold(snapshot.val().value);
+                    dispatchGold({ type: "set", value: snapshot.val().value });
                 } else {
                     console.log("No data available");
                 }
@@ -46,12 +62,12 @@ const GoldContextProvider = (props) => {
             });
     }, []);
 
-    saveGoldToDatabase(gold);
+    saveGoldToDatabase(gold.gold);
     return (
         <GoldContext.Provider
             value={{
                 gold: gold,
-                setGold: setGold,
+                dispatchGold: dispatchGold,
             }}
         >
             {props.children}

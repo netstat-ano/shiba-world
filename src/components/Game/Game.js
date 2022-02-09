@@ -5,7 +5,6 @@ import ChangeRoom from "../ChangeRoom/ChangeRoom";
 import Dog from "../Dog/Dog";
 import Gold from "../Gold/Gold";
 import NeedsContextProvider from "../needs-context/NeedsContext";
-import DragDropContextProvider from "../DragDropContextProvider/DragDropContextProvider";
 import GoldContextProvider from "../gold-context/GoldContext";
 import Needs from "../Needs/Needs";
 import SleepContextProvider from "../sleep-context/SleepContext";
@@ -23,14 +22,13 @@ const Game = (props) => {
                         {!props.gameMode && <ChangeRoom />}
                         <NeedsContextProvider>
                             {!props.gameMode && <Needs />}
-                            <DragDropContextProvider>
-                                {!props.gameMode && <Dog />}
-                                <div id="game-root"></div>
-                                <BottomPanel
-                                    gameMode={props.gameMode}
-                                    setGameMode={props.setGameMode}
-                                />
-                            </DragDropContextProvider>
+
+                            {!props.gameMode && <Dog />}
+                            <div id="game-root"></div>
+                            <BottomPanel
+                                gameMode={props.gameMode}
+                                setGameMode={props.setGameMode}
+                            />
                         </NeedsContextProvider>
                     </PlaceContextProvider>
                 </SleepContextProvider>

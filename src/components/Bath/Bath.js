@@ -24,9 +24,7 @@ const Bath = () => {
             });
         }).then((is) => {
             if (is) {
-                goldCtx.setGold((prevState) => {
-                    return { change: 20, value: prevState + 10 };
-                });
+                goldCtx.dispatchGold({ type: "add", howMuch: 10 });
             }
         });
     };

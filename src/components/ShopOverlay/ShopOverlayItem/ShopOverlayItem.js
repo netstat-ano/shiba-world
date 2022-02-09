@@ -16,7 +16,7 @@ const ShopOverlayItem = (props) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
     };
     const onBuyHandler = (event) => {
-        if (goldCtx.gold - props.item.price >= 0) {
+        if (goldCtx.gold.gold - props.item.price >= 0) {
             const db = ref(database);
             const foodRef = ref(
                 database,
@@ -53,9 +53,10 @@ const ShopOverlayItem = (props) => {
                 update,
                 timeout(700).then(() => {
                     setIsDisabled(false);
-                    goldCtx.setGold(
-                        (prevState) => prevState - props.item.price
-                    );
+                    goldCtx.dispatchGold({
+                        type: "minus",
+                        howMuch: props.item.price,
+                    });
                     props.setRerender({});
                 }),
             ]);
