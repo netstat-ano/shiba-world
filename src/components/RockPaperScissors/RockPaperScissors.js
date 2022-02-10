@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReactDOM from "react-dom";
-import AlertClickPortal from "../UI/AlertClick/AlertClick";
+import { GoldContext } from "../gold-context/GoldContext";
 import styles from "./RockPaperScissors.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const RockPaperScissors = (props) => {
     const [aiMoveState, setAiMoveState] = useState("");
     const [winner, setWinner] = useState("");
-
+    const goldCtx = useContext(GoldContext);
     const AiMove = () => {
         return ["rock", "paper", "scissors"][Math.floor(Math.random() * 3)];
     };
-    const playerMove = (event) => {
-        setAiMoveState("");
-        setWinner("");
-        const player = event.target.id;
+
+    const addGold = () => {
+        goldCtx.dispatchGold({
+            type: "add",
+            howMuch: 1,
+        });
+    };
+
+    const playerMove = async (event) => {
+        const player = event.target.parentNode.id;
         const ai = AiMove();
+        let currentWinner = "Draw";
         setAiMoveState(ai);
         if (player === ai) {
             setWinner("Draw");
@@ -22,17 +29,22 @@ const RockPaperScissors = (props) => {
             setWinner("Ai");
         } else if (player === "rock" && ai === "scissors") {
             setWinner("Player");
+            currentWinner = "Player";
         } else if (player === "paper" && ai === "rock") {
             setWinner("Player");
+            currentWinner = "Player";
         } else if (player === "paper" && ai === "scissors") {
             setWinner("Ai");
         } else if (player === "scissors" && ai === "rock") {
             setWinner("Ai");
         } else if (player === "scissors" && ai === "paper") {
             setWinner("Player");
+            currentWinner = "Player";
+        }
+        if (currentWinner === "Player") {
+            addGold();
         }
     };
-    console.log(winner);
     return (
         <div className={styles["rock-paper-scissors"]}>
             <div>{winner !== "Draw" ? `${winner} has won` : "Draw"}</div>
