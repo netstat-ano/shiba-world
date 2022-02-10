@@ -167,6 +167,11 @@ const TicTacToe = (props) => {
                     howMuch: 5,
                 });
                 needsCtx.dispatchNeeds({
+                    needs: "fun",
+                    type: "minus",
+                    howMuch: 10,
+                });
+                needsCtx.dispatchNeeds({
                     needs: "thirsty",
                     type: "minus",
                     howMuch: 10,
@@ -206,7 +211,7 @@ const TicTacToe = (props) => {
                     props.onUndo();
                 }}
             >
-                X
+                Quit game
             </div>
             <div className={result !== null ? styles.overlay : ""}>
                 <GameArea

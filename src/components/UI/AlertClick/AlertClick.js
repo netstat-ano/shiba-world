@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom";
+import GreenButton from "../GreenButton/GreenButton";
 import styles from "./AlertClick.module.scss";
 const AlertClick = (props) => {
     return (
@@ -6,7 +7,9 @@ const AlertClick = (props) => {
             <div className={styles.title}>{props.title}</div>
             <div>{props.content}</div>
             <div>
-                <button onClick={props.onConfirm}>OK</button>
+                <GreenButton button={{ onClick: props.onConfirm }}>
+                    OK
+                </GreenButton>
             </div>
         </div>
     );

@@ -1,7 +1,17 @@
-.shop-item__name{
+.shop-item__name {
     color: #007bff;
 }
-.shop-item__price{
-    color: #FFD700;
-    text-shadow: black 0.1em 0.1em 0.2em
+.shop-item__price {
+    color: #ffd700;
+    text-shadow: black 0.1em 0.1em 0.2em;
+}
+.card {
+    z-index: 155;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.bone {
+    color: gray;
+}
+.tint {
+    color: #007bff;
 }

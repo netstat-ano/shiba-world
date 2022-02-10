@@ -4,6 +4,7 @@ import { get, child, ref } from "firebase/database";
 import TicTacToePortal from "../TicTacToe/TicTacToe";
 import Overlay from "../UI/Overlay/Overlay";
 import { useEffect, useState } from "react";
+import RockPaperScissorsPortal from "../RockPaperScissors/RockPaperScissors";
 const LivingRoom = (props) => {
     const [isOverlayShowed, setIsOverlayShowed] = useState(false);
     const [game, setGame] = useState("");
@@ -34,6 +35,9 @@ const LivingRoom = (props) => {
         <>
             {game === "tic-tac-toe" && (
                 <TicTacToePortal onUndo={onUndoHandler} />
+            )}
+            {game === "Rock paper scissors" && (
+                <RockPaperScissorsPortal onUndo={onUndoHandler} />
             )}
             {isOverlayShowed && (
                 <Overlay

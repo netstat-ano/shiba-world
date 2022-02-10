@@ -11,14 +11,14 @@ const GardenWork = () => {
                 howMuch: "20",
             });
         }
-        if (needsCtx.needs.thirsty >= 14) {
+        if (needsCtx.needs.thirsty > 15) {
             needsCtx.dispatchNeeds({
                 type: "minus",
                 needs: "thirsty",
                 howMuch: "15",
             });
         }
-        if (needsCtx.needs.hunger >= 9) {
+        if (needsCtx.needs.hunger > 10) {
             needsCtx.dispatchNeeds({
                 type: "minus",
                 needs: "hunger",
@@ -29,7 +29,7 @@ const GardenWork = () => {
     return (
         <div>
             <UnvisibleButton button={{ onClick: onGarden }}>
-                Take care of garden
+                Take the dog for a walk
             </UnvisibleButton>
         </div>
     );

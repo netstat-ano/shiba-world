@@ -64,18 +64,18 @@ const ShopOverlayItem = (props) => {
     };
     console.log(props.item);
     return (
-        <Card>
+        <Card className={styles.card}>
             <div className={styles["shop-item__name"]}>{props.item.name}</div>
             <div className={styles["shop-item__price"]}>
                 {props.item.price} gold
             </div>
             {props.item.food && (
-                <div>
+                <div className={styles.bone}>
                     <FontAwesomeIcon icon="bone" />
                 </div>
             )}
             {props.item.drink && (
-                <div>
+                <div className={styles.tint}>
                     <FontAwesomeIcon icon="tint" />
                 </div>
             )}

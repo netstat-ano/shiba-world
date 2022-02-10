@@ -34,6 +34,20 @@ const ItemsSwitcher = (props) => {
                 content.drink &&
                 needsCtx.needs.thirsty < 100)
         ) {
+            if (content.name === "Coffee" || content.name === "Cola") {
+                needsCtx.dispatchNeeds({
+                    type: "add",
+                    needs: "sleep",
+                    howMuch: 10,
+                });
+                if (needsCtx.needs.sleep > 100) {
+                    needsCtx.dispatchNeeds({
+                        type: "add",
+                        needs: "sleep",
+                        howMuch: needsCtx.needs.sleep - 100,
+                    });
+                }
+            }
             if (content.food) {
                 needsCtx.dispatchNeeds({
                     type: "add",
