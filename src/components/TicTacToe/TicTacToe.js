@@ -205,14 +205,6 @@ const TicTacToe = (props) => {
                     onConfirm={onConfirmHandler}
                 />
             )}
-            <div
-                onClick={() => {
-                    reset(setResult, setTurn, dispatchBoard);
-                    props.onUndo();
-                }}
-            >
-                Quit game
-            </div>
             <div className={result !== null ? styles.overlay : ""}>
                 <GameArea
                     turn={turn}
@@ -289,6 +281,15 @@ const TicTacToe = (props) => {
                     index={2}
                 />
                 <ClearBoth />
+            </div>
+            <div
+                className={styles.quit}
+                onClick={() => {
+                    reset(setResult, setTurn, dispatchBoard);
+                    props.onUndo();
+                }}
+            >
+                Quit game
             </div>
         </div>
     );

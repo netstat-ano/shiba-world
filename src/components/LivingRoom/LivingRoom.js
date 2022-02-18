@@ -5,6 +5,8 @@ import TicTacToePortal from "../TicTacToe/TicTacToe";
 import Overlay from "../UI/Overlay/Overlay";
 import { useEffect, useState } from "react";
 import RockPaperScissorsPortal from "../RockPaperScissors/RockPaperScissors";
+import CheckersPortal from "../Checkers/Checkers";
+import CheckersContextProvider from "../Checkers/Square/checkers-context/CheckersContext";
 const LivingRoom = (props) => {
     const [isOverlayShowed, setIsOverlayShowed] = useState(false);
     const [game, setGame] = useState("");
@@ -33,11 +35,16 @@ const LivingRoom = (props) => {
     }, []);
     return (
         <>
-            {game === "tic-tac-toe" && (
+            {game === "Tic tac toe" && (
                 <TicTacToePortal onUndo={onUndoHandler} />
             )}
             {game === "Rock paper scissors" && (
                 <RockPaperScissorsPortal onUndo={onUndoHandler} />
+            )}
+            {game === "Checkers" && (
+                <CheckersContextProvider>
+                    <CheckersPortal />
+                </CheckersContextProvider>
             )}
             {isOverlayShowed && (
                 <Overlay

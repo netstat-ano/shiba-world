@@ -8,6 +8,7 @@ import {
     faHandPaper,
     faHandRock,
     faHandScissors,
+    faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
@@ -24,7 +25,8 @@ function App() {
         faTint,
         faHandRock,
         faHandScissors,
-        faHandPaper
+        faHandPaper,
+        faCircle
     );
     return (
         <div className={gameMode ? styles["app-game-mode"] : styles.app}>

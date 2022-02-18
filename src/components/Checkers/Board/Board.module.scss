@@ -1,0 +1,16 @@
+.white {
+    background-color: white;
+}
+.black {
+    background-color: rgb(37, 36, 36);
+}
+.board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+.white-pawn {
+    color: white;
+}
+.black-pawn {
+    color: black;
+}
