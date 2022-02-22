@@ -4,10 +4,16 @@ import styles from "./Board.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Board = (props) => {
     const blackPawn = (
-        <FontAwesomeIcon className={styles["black-pawn"]} icon="circle" />
+        <FontAwesomeIcon
+            className={`${styles["black-pawn"]} black-pawn`}
+            icon="circle"
+        />
     );
     const whitePawn = (
-        <FontAwesomeIcon className={styles["white-pawn"]} icon="circle" />
+        <FontAwesomeIcon
+            className={`${styles["white-pawn"]} white-pawn`}
+            icon="circle"
+        />
     );
     const renderedBoard = [];
     for (let i = 0; i < 63; i++) {
