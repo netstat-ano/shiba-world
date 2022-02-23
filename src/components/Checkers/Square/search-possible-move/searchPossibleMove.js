@@ -1,9 +1,9 @@
+import isCapturingPawnPossible from "../../isCapturingPawnPossible/isCapturingPawnPossible";
 const searchPossibleMove = (target) => {
     const board = target.parentNode.parentNode.parentNode;
     const square = target.parentNode.parentNode;
     const arr = [...board.children];
     let result = [];
-
     arr.forEach((element, index, arr) => {
         if (element === square) {
             if (
@@ -45,6 +45,15 @@ const searchPossibleMove = (target) => {
             }
         }
     });
-    return result;
+    const isCapturingPawn = isCapturingPawnPossible({
+        square,
+        arr,
+        result,
+        target: target.parentNode,
+    });
+    return {
+        possibleMoves: [...result, ...isCapturingPawn.activePlace],
+        capturedPawn: isCapturingPawn.capturedPawn,
+    };
 };
 export default searchPossibleMove;

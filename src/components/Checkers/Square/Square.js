@@ -3,7 +3,6 @@ import styles from "./Square.module.scss";
 import searchPossibleMove from "./search-possible-move/searchPossibleMove";
 import checkIfClickedSquareWasSelected from "./checkIfClickedSquareWasSelected/checkIfClickedSquareWasSelected";
 import { CheckersContext } from "./checkers-context/CheckersContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Square = (props) => {
     const divRef = useRef();
     const checkersCtx = useContext(CheckersContext);
@@ -39,17 +38,17 @@ const Square = (props) => {
                 randomBlackPawn.children[0]
             );
             if (
-                (isMovePossible[0] === undefined &&
-                    isMovePossible[1] === undefined) ||
-                isMovePossible[0].children.length > 0 ||
-                isMovePossible[0].children.length > 0
+                (isMovePossible.possibleMoves[0] === undefined &&
+                    isMovePossible.possibleMoves[1] === undefined) ||
+                isMovePossible.possibleMoves[0].children.length > 0 ||
+                isMovePossible.possibleMoves[0].children.length > 0
             ) {
                 aiMove(event);
             } else {
-                console.log(randomBlackPawn);
-                console.log(isMovePossible);
-                isMovePossible[
-                    Math.floor(Math.random() * isMovePossible.length)
+                isMovePossible.possibleMoves[
+                    Math.floor(
+                        Math.random() * isMovePossible.possibleMoves.length
+                    )
                 ].innerHTML = `<svg
                         aria-hidden="true"
                         focusable="false"
@@ -79,16 +78,15 @@ const Square = (props) => {
         );
         if (isMovePossible) {
             move(event.target);
+            aiMove(event);
         } else {
-            console.log(event.target);
             const response = searchPossibleMove(event.target);
             checkersCtx.setActive({
-                activeElements: [...response],
+                activeElements: [...response.possibleMoves],
                 movedElement: divRef,
                 className: styles.active,
             });
         }
-        aiMove(event);
     };
 
     if (props.className.includes("board-black")) {
