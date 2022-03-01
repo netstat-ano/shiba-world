@@ -8,9 +8,28 @@ const Square = (props) => {
     const checkersCtx = useContext(CheckersContext);
     let pawn = "";
 
-    const move = (target) => {
+    const move = (target, divRef, capturedPawn) => {
+        const arr = [...divRef.current.parentElement.children];
+        const firstPossiblyCaptured = arr[arr.indexOf(target) + 8];
+        const secondPossiblyCaptured = arr[arr.indexOf(target) + 6];
+        console.log(capturedPawn);
+        console.log(firstPossiblyCaptured);
+        console.log(secondPossiblyCaptured);
         target.innerHTML = checkersCtx.active.movedElement.current.innerHTML;
         checkersCtx.active.movedElement.current.innerHTML = "";
+        if (
+            firstPossiblyCaptured.children !== undefined &&
+            firstPossiblyCaptured.children.length > 0 &&
+            arr[arr.indexOf(target) + 16].children.length === 0
+        ) {
+            firstPossiblyCaptured.innerHTML = "";
+        } else if (
+            secondPossiblyCaptured.children !== undefined &&
+            secondPossiblyCaptured.children.length > 0 &&
+            arr[arr.indexOf(target) + 12].children.length === 0
+        ) {
+            secondPossiblyCaptured.innerHTML = "";
+        }
         checkersCtx.setActive((prevState) => {
             return {
                 activeElements: "",
@@ -24,32 +43,58 @@ const Square = (props) => {
         if (event) {
             const board = event.target.parentNode.children;
             const boardArr = [...board];
+            console.log(boardArr);
             const blackPawnsOnBoard = boardArr.filter((element) => {
                 return (
                     element.innerHTML.length > 0 &&
                     element.children[0].classList.contains("black-pawn")
                 );
             });
-            const randomBlackPawn =
-                blackPawnsOnBoard[
-                    Math.floor(Math.random() * blackPawnsOnBoard.length)
-                ].children[0];
+            let possibleCapturingPawn = blackPawnsOnBoard.filter(
+                (blackPawn) => {
+                    const index = boardArr.indexOf(blackPawn);
+                    console.log(boardArr[index + 8].children[0]);
+                    if (
+                        boardArr[index + 8].children[0] &&
+                        boardArr[index + 8].children[0].classList.contains(
+                            "white-pawn"
+                        ) &&
+                        boardArr[index + 16].children.length === 0 &&
+                        boardArr[index + 16].classList.contains("board-black")
+                    ) {
+                        return boardArr[index];
+                    } else {
+                        return null;
+                    }
+                }
+            );
+            let randomBlackPawn = null;
+            if (possibleCapturingPawn[0]) {
+                randomBlackPawn = possibleCapturingPawn[0].children[0];
+                console.log(randomBlackPawn.children[0]);
+            }
+            if (!randomBlackPawn) {
+                randomBlackPawn =
+                    blackPawnsOnBoard[
+                        Math.floor(Math.random() * blackPawnsOnBoard.length)
+                    ].children[0];
+            }
             const isMovePossible = searchPossibleMove(
                 randomBlackPawn.children[0]
             );
-            if (
-                (isMovePossible.possibleMoves[0] === undefined &&
-                    isMovePossible.possibleMoves[1] === undefined) ||
-                isMovePossible.possibleMoves[0].children.length > 0 ||
-                isMovePossible.possibleMoves[0].children.length > 0
-            ) {
+            console.log(randomBlackPawn);
+            console.log(isMovePossible);
+            if (isMovePossible.possibleMoves.length === 0) {
                 aiMove(event);
             } else {
-                isMovePossible.possibleMoves[
-                    Math.floor(
-                        Math.random() * isMovePossible.possibleMoves.length
-                    )
-                ].innerHTML = `<svg
+                const randomMove =
+                    isMovePossible.possibleMoves[
+                        Math.floor(
+                            Math.random() * isMovePossible.possibleMoves.length
+                        )
+                    ];
+                if (randomMove.children.length === 0) {
+                    randomMove.innerHTML = `<svg
                         aria-hidden="true"
                         focusable="false"
                         data-prefix="fas"
@@ -65,7 +110,10 @@ const Square = (props) => {
                         ></path>
                     </svg>`;
 
-                randomBlackPawn.parentNode.innerHTML = "";
+                    randomBlackPawn.parentNode.innerHTML = "";
+                } else {
+                    aiMove(event);
+                }
             }
         }
     };
@@ -76,11 +124,14 @@ const Square = (props) => {
             event.target,
             checkersCtx.active
         );
+        let response = null;
+
+        response = searchPossibleMove(event.target);
+
         if (isMovePossible) {
-            move(event.target);
+            move(event.target, divRef);
             aiMove(event);
         } else {
-            const response = searchPossibleMove(event.target);
             checkersCtx.setActive({
                 activeElements: [...response.possibleMoves],
                 movedElement: divRef,

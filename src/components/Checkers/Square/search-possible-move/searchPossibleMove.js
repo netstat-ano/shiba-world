@@ -11,8 +11,7 @@ const searchPossibleMove = (target) => {
                 (element === arr[13] ||
                     element === arr[27] ||
                     element === arr[41] ||
-                    element === arr[55]) &&
-                arr[index - 8].children.length === 0
+                    element === arr[55])
             ) {
                 result = [arr[index - 8]];
             } else if (
@@ -20,8 +19,7 @@ const searchPossibleMove = (target) => {
                 (element === arr[49] ||
                     element === arr[35] ||
                     element === arr[21] ||
-                    element === arr[7]) &&
-                arr[index - 6].children.length === 0
+                    element === arr[7])
             ) {
                 result = [arr[index - 6]];
             } else if (
@@ -29,8 +27,7 @@ const searchPossibleMove = (target) => {
                 (element === arr[13] ||
                     element === arr[27] ||
                     element === arr[41] ||
-                    element === arr[55]) &&
-                arr[index + 6].children.length === 0
+                    element === arr[55])
             ) {
                 result = [arr[index + 6]];
             } else if (
@@ -38,24 +35,17 @@ const searchPossibleMove = (target) => {
                 (element === arr[7] ||
                     element === arr[21] ||
                     element === arr[35] ||
-                    element === arr[49]) &&
-                arr[index + 8].children.length === 0
+                    element === arr[49])
             ) {
                 result = [arr[index + 8]];
             } else if (square.children[0].classList.contains("white-pawn")) {
-                if (arr[index - 6].children.length === 0) {
-                    result.push(arr[index - 6]);
-                }
-                if (arr[index - 8].children.length === 0) {
-                    result.push(arr[index - 8]);
-                }
+                result.push(arr[index - 6]);
+
+                result.push(arr[index - 8]);
             } else {
-                if (arr[index + 6].children.length === 0) {
-                    result.push(arr[index + 6]);
-                }
-                if (arr[index + 8].children.length === 0) {
-                    result.push(arr[index + 8]);
-                }
+                result.push(arr[index + 6]);
+
+                result.push(arr[index + 8]);
             }
         }
     });
@@ -68,6 +58,7 @@ const searchPossibleMove = (target) => {
     return {
         possibleMoves: [...result, ...isCapturingPawn.activePlace],
         capturedPawn: [...isCapturingPawn.capturedPawn],
+        arr: [...arr],
     };
 };
 export default searchPossibleMove;
