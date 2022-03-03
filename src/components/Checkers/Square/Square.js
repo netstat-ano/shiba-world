@@ -15,8 +15,6 @@ const Square = (props) => {
         console.log(capturedPawn);
         console.log(firstPossiblyCaptured);
         console.log(secondPossiblyCaptured);
-        target.innerHTML = checkersCtx.active.movedElement.current.innerHTML;
-        checkersCtx.active.movedElement.current.innerHTML = "";
         if (
             firstPossiblyCaptured.children !== undefined &&
             firstPossiblyCaptured.children.length > 0 &&
@@ -30,6 +28,8 @@ const Square = (props) => {
         ) {
             secondPossiblyCaptured.innerHTML = "";
         }
+        target.innerHTML = checkersCtx.active.movedElement.current.innerHTML;
+        checkersCtx.active.movedElement.current.innerHTML = "";
         checkersCtx.setActive((prevState) => {
             return {
                 activeElements: "",
@@ -79,6 +79,8 @@ const Square = (props) => {
                         Math.floor(Math.random() * blackPawnsOnBoard.length)
                     ].children[0];
             }
+            console.log(randomBlackPawn);
+            console.log(possibleCapturingPawn);
             const isMovePossible = searchPossibleMove(
                 randomBlackPawn.children[0]
             );

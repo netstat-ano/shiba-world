@@ -48,11 +48,11 @@ const Sleep = () => {
         }
     };
     return (
-        <div>
+        <>
             <UnvisibleButton button={{ onClick: onSleep }}>
                 Sleep
             </UnvisibleButton>
-        </div>
+        </>
     );
 };
 export default Sleep;

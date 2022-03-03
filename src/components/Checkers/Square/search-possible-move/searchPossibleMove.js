@@ -55,6 +55,7 @@ const searchPossibleMove = (target) => {
         result,
         target: target.parentNode,
     });
+    console.log(isCapturingPawn);
     return {
         possibleMoves: [...result, ...isCapturingPawn.activePlace],
         capturedPawn: [...isCapturingPawn.capturedPawn],

@@ -27,11 +27,11 @@ const GardenWork = () => {
         }
     };
     return (
-        <div>
+        <>
             <UnvisibleButton button={{ onClick: onGarden }}>
                 Take the dog for a walk
             </UnvisibleButton>
-        </div>
+        </>
     );
 };
 export default GardenWork;

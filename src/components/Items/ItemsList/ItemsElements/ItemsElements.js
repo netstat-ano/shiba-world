@@ -15,7 +15,7 @@ const ItemsElements = (props) => {
                     inventory={props.inventory}
                 />
             ) : (
-                <p>You don't have items</p>
+                <div className={styles[`no-items`]}>You don't have items</div>
             )}
         </div>
     );
